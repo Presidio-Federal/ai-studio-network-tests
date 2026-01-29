@@ -1,83 +1,548 @@
 {
   "repository": "hai-network-tests",
-  "description": "Presidio Federal HAI Network Validation Test Catalog",
-  "version": "1.0.1",
+  "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
+  "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2025-10-08T16:45:00Z",
-  "categories": {
-    "general": {
-      "description": "Generic validation tests applicable across all platforms (e.g., NTP, DNS, syslog, management access).",
+  "last_updated": "2026-01-29T00:00:00Z",
+  "schema_version": "2.0",
+  "metadata": {
+    "purpose": "Centralized compliance testing repository for network infrastructure",
+    "ai_agent_compatible": true,
+    "query_capabilities": ["framework", "platform", "test_type", "severity", "control_id"],
+    "supported_extraction_methods": ["cli_structured", "api_native", "nso", "netconf", "restconf"]
+  },
+  "platform_registry": {
+    "cisco-ios-xe": {
+      "vendor": "cisco",
+      "os_family": "ios",
+      "display_name": "Cisco IOS XE",
+      "extraction_methods": ["cli_structured", "netconf", "restconf", "nso"],
+      "parsers": ["textfsm", "genie", "ttp"]
+    },
+    "cisco-nxos": {
+      "vendor": "cisco",
+      "os_family": "nxos",
+      "display_name": "Cisco NX-OS",
+      "extraction_methods": ["cli_structured", "nxapi", "netconf", "nso"],
+      "parsers": ["textfsm", "genie", "ttp"]
+    },
+    "juniper-junos": {
+      "vendor": "juniper",
+      "os_family": "junos",
+      "display_name": "Juniper Junos",
+      "extraction_methods": ["cli_structured", "netconf", "pyez"],
+      "parsers": ["textfsm", "jsnapy"]
+    },
+    "cisco-sdwan": {
+      "vendor": "cisco",
+      "os_family": "sdwan",
+      "display_name": "Cisco SD-WAN (Viptela)",
+      "extraction_methods": ["api_native", "vmanage_api"],
+      "parsers": ["api_native"]
+    },
+    "cisco-dnac": {
+      "vendor": "cisco",
+      "os_family": "controller",
+      "display_name": "Cisco DNA Center",
+      "extraction_methods": ["api_native", "dnac_api"],
+      "parsers": ["api_native"]
+    },
+    "nso": {
+      "vendor": "cisco",
+      "os_family": "orchestrator",
+      "display_name": "Cisco Network Services Orchestrator",
+      "extraction_methods": ["api_native", "restconf", "netconf"],
+      "parsers": ["api_native"]
+    },
+    "multi-vendor": {
+      "vendor": "multiple",
+      "os_family": "generic",
+      "display_name": "Multi-Vendor Generic Tests",
+      "extraction_methods": ["cli_structured", "api_native"],
+      "parsers": ["textfsm", "genie"]
+    }
+  },
+  "compliance_frameworks": {
+    "STIG": {
+      "full_name": "Security Technical Implementation Guides",
+      "authority": "DISA",
+      "description": "Department of Defense security configuration standards",
+      "url": "https://public.cyber.mil/stigs/",
       "platforms": {
-        "multi": {
-          "path": "general",
-          "tests": [
-            {
-              "name": "general_ntp_test.py",
-              "description": "Verify that devices have at least two reachable NTP servers configured and synchronized.",
-              "tags": ["ntp", "time", "synchronization", "baseline"],
-              "controls": [],
-              "estimated_runtime": "fast"
+        "cisco-ios-xe": {
+          "platform_variant": "switch-ndm",
+          "stig_version": "V2R9",
+          "test_types": {
+            "data_validation": {
+              "description": "Configuration validation using pytest and structured data",
+              "framework": "pytest",
+              "path": "stig/ios-xe-switch-ndm",
+              "tests": [
+                {
+                  "id": "stig-iosxe-v220556-dv-001",
+                  "name": "CISC-ND-001210.py",
+                  "description": "Ensure SSH version 2 and FIPS-approved encryption algorithms are configured instead of insecure protocols like Telnet or HTTP.",
+                  "test_type": "data_validation",
+                  "framework": "STIG",
+                  "platform": "cisco-ios-xe",
+                  "control_id": "CISC-ND-001210",
+                  "finding_id": "V-220556",
+                  "rule_id": "SV-220556r961557_rule",
+                  "severity": "high",
+                  "stig_date": "2025-02-20",
+                  "tags": ["ssh", "encryption", "stig", "fips", "remote-access"],
+                  "estimated_runtime": "fast",
+                  "input_schema": "schemas/cisco_ios_xe_config.json",
+                  "dependencies": ["pytest", "json"],
+                  "requires_state_data": false,
+                  "requires_traffic_data": false
+                }
+              ]
+            },
+            "state_checks": {
+              "description": "Operational state validation using pyATS/Genie",
+              "framework": "pyats",
+              "path": "stig/ios-xe-switch-ndm/state",
+              "tests": []
+            },
+            "traffic_tests": {
+              "description": "Traffic flow and security policy validation",
+              "framework": "batfish",
+              "path": "stig/ios-xe-switch-ndm/traffic",
+              "tests": []
             }
-          ]
+          }
         }
       }
     },
-    "csfc": {
-      "description": "Commercial Solutions for Classified (CSfC) test suites for approved architecture components.",
-      "platforms": {
+    "CSfC": {
+      "full_name": "Commercial Solutions for Classified",
+      "authority": "NSA",
+      "description": "NSA-approved architecture components for classified environments",
+      "url": "https://www.nsa.gov/resources/commercial-solutions-for-classified-program/",
+      "architectures": {
         "eg-dr": {
-          "path": "csfc/eg-dr",
-          "tests": [
-            {
-              "name": "test_eg_dr_1.py",
-              "description": "Validate CSfC EG Data-in-Transit (DR) component configuration compliance.",
-              "tags": ["csfc", "eg-dr", "encryption", "vpn"],
-              "controls": [],
-              "estimated_runtime": "medium"
+          "architecture_name": "Enclave Gateway - Data in Transit (DR)",
+          "description": "Encrypted tunnel gateway for data-in-transit protection",
+          "platforms": {
+            "juniper-junos": {
+              "device_type": "firewall",
+              "test_types": {
+                "data_validation": {
+                  "description": "CSfC EG-DR configuration compliance validation",
+                  "framework": "pytest",
+                  "path": "csfc/eg-dr",
+                  "tests": [
+                    {
+                      "id": "csfc-egdr-junos-dv-001",
+                      "name": "test_eg_dr_1.py",
+                      "description": "Validate CSfC EG Data-in-Transit (DR) component configuration compliance.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-dr",
+                      "control_id": "CSfC-EG-DR-001",
+                      "severity": "high",
+                      "tags": ["csfc", "eg-dr", "encryption", "vpn", "ipsec"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest", "json"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    }
+                  ]
+                },
+                "state_checks": {
+                  "description": "VPN tunnel state and encryption validation",
+                  "framework": "pyats",
+                  "path": "csfc/eg-dr/state",
+                  "tests": []
+                },
+                "traffic_tests": {
+                  "description": "Encrypted tunnel traffic flow validation",
+                  "framework": "batfish",
+                  "path": "csfc/eg-dr/traffic",
+                  "tests": []
+                }
+              }
             }
-          ]
+          }
         },
         "eg-fw": {
-          "path": "csfc/eg-fw",
-          "tests": [
-            {"name": "test_eg_fw_1.py", "description": "Edge Firewall CSfC compliance test 1.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_2.py", "description": "Edge Firewall CSfC compliance test 2.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_3.py", "description": "Edge Firewall CSfC compliance test 3.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_4.py", "description": "Edge Firewall CSfC compliance test 4.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_5.py", "description": "Edge Firewall CSfC compliance test 5.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_6.py", "description": "Edge Firewall CSfC compliance test 6.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_11.py", "description": "Edge Firewall CSfC compliance test 11.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_12.py", "description": "Edge Firewall CSfC compliance test 12.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_13.py", "description": "Edge Firewall CSfC compliance test 13.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_15.py", "description": "Edge Firewall CSfC compliance test 15.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_16.py", "description": "Edge Firewall CSfC compliance test 16.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_19.py", "description": "Edge Firewall CSfC compliance test 19.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_20.py", "description": "Edge Firewall CSfC compliance test 20.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"},
-            {"name": "test_eg_fw_21.py", "description": "Edge Firewall CSfC compliance test 21.", "tags": ["csfc", "eg-fw"], "controls": [], "estimated_runtime": "medium"}
-          ]
+          "architecture_name": "Enclave Gateway - Firewall",
+          "description": "Perimeter security firewall component",
+          "platforms": {
+            "juniper-junos": {
+              "device_type": "firewall",
+              "test_types": {
+                "data_validation": {
+                  "description": "CSfC EG-FW security policy validation",
+                  "framework": "pytest",
+                  "path": "csfc/eg-fw",
+                  "tests": [
+                    {
+                      "id": "csfc-egfw-junos-dv-001",
+                      "name": "test_eg_fw_1.py",
+                      "description": "EG-FW-1: Only known gray IPs and management traffic are accepted",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-001",
+                      "severity": "high",
+                      "tags": ["csfc", "eg-fw", "firewall", "access-control"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest", "json"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-002",
+                      "name": "test_eg_fw_2.py",
+                      "description": "Edge Firewall CSfC compliance test 2.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-002",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-003",
+                      "name": "test_eg_fw_3.py",
+                      "description": "Edge Firewall CSfC compliance test 3.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-003",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-004",
+                      "name": "test_eg_fw_4.py",
+                      "description": "Edge Firewall CSfC compliance test 4.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-004",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-005",
+                      "name": "test_eg_fw_5.py",
+                      "description": "Edge Firewall CSfC compliance test 5.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-005",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-006",
+                      "name": "test_eg_fw_6.py",
+                      "description": "Edge Firewall CSfC compliance test 6.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-006",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-011",
+                      "name": "test_eg_fw_11.py",
+                      "description": "Edge Firewall CSfC compliance test 11.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-011",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-012",
+                      "name": "test_eg_fw_12.py",
+                      "description": "Edge Firewall CSfC compliance test 12.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-012",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-013",
+                      "name": "test_eg_fw_13.py",
+                      "description": "Edge Firewall CSfC compliance test 13.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-013",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-015",
+                      "name": "test_eg_fw_15.py",
+                      "description": "Edge Firewall CSfC compliance test 15.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-015",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-016",
+                      "name": "test_eg_fw_16.py",
+                      "description": "Edge Firewall CSfC compliance test 16.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-016",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-019",
+                      "name": "test_eg_fw_19.py",
+                      "description": "Edge Firewall CSfC compliance test 19.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-019",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-020",
+                      "name": "test_eg_fw_20.py",
+                      "description": "Edge Firewall CSfC compliance test 20.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-020",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    },
+                    {
+                      "id": "csfc-egfw-junos-dv-021",
+                      "name": "test_eg_fw_21.py",
+                      "description": "Edge Firewall CSfC compliance test 21.",
+                      "test_type": "data_validation",
+                      "framework": "CSfC",
+                      "platform": "juniper-junos",
+                      "architecture": "eg-fw",
+                      "control_id": "CSfC-EG-FW-021",
+                      "severity": "medium",
+                      "tags": ["csfc", "eg-fw"],
+                      "estimated_runtime": "medium",
+                      "input_schema": "schemas/juniper_junos_config.json",
+                      "dependencies": ["pytest"],
+                      "requires_state_data": false,
+                      "requires_traffic_data": false
+                    }
+                  ]
+                },
+                "state_checks": {
+                  "description": "Firewall security policy state validation",
+                  "framework": "pyats",
+                  "path": "csfc/eg-fw/state",
+                  "tests": []
+                },
+                "traffic_tests": {
+                  "description": "Security policy traffic flow analysis",
+                  "framework": "batfish",
+                  "path": "csfc/eg-fw/traffic",
+                  "tests": []
+                }
+              }
+            }
+          }
         }
       }
     },
-    "stig": {
-      "description": "DISA STIG and hardening validation tests for supported platforms.",
+    "NIST-800-53": {
+      "full_name": "NIST Special Publication 800-53",
+      "authority": "NIST",
+      "description": "Security and Privacy Controls for Information Systems and Organizations",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
+      "revision": "Rev 5",
+      "platforms": {}
+    },
+    "PCI-DSS": {
+      "full_name": "Payment Card Industry Data Security Standard",
+      "authority": "PCI Security Standards Council",
+      "description": "Security standards for organizations that handle credit card data",
+      "url": "https://www.pcisecuritystandards.org/",
+      "version": "4.0",
+      "platforms": {}
+    },
+    "HIPAA": {
+      "full_name": "Health Insurance Portability and Accountability Act",
+      "authority": "HHS",
+      "description": "Security and privacy requirements for healthcare data",
+      "url": "https://www.hhs.gov/hipaa/",
+      "platforms": {}
+    },
+    "Purdue": {
+      "full_name": "Purdue Model for Industrial Control Systems",
+      "authority": "ISA/IEC",
+      "description": "Network segmentation model for industrial control systems (ICS/OT)",
+      "url": "https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards",
+      "related_standards": ["IEC 62443", "ISA-95"],
+      "platforms": {}
+    },
+    "general": {
+      "full_name": "General Baseline Security Tests",
+      "authority": "Internal",
+      "description": "Generic validation tests applicable across all platforms and frameworks (e.g., NTP, DNS, syslog, management access)",
       "platforms": {
-        "ios-xe-switch-ndm": {
-          "path": "stig/ios-xe-switch-ndm",
-          "tests": [
-            {
-              "name": "CISC-ND-001210.py",
-              "description": "Ensure SSH version 2 and FIPS-approved encryption algorithms are configured instead of insecure protocols like Telnet or HTTP.",
-              "stig_id": "CISC-ND-001210",
-              "finding_id": "V-220556",
-              "rule_id": "SV-220556r961557_rule",
-              "severity": "High",
-              "stig_date": "2025-02-20",
-              "tags": ["ssh", "encryption", "stig", "fips"],
-              "estimated_runtime": "fast"
+        "multi-vendor": {
+          "test_types": {
+            "data_validation": {
+              "description": "Generic baseline configuration validation",
+              "framework": "pytest",
+              "path": "general",
+              "tests": [
+                {
+                  "id": "general-multi-dv-ntp-001",
+                  "name": "general_ntp_test.py",
+                  "description": "Verify that devices have at least two reachable NTP servers configured and synchronized.",
+                  "test_type": "data_validation",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-TIME-001",
+                  "severity": "medium",
+                  "tags": ["ntp", "time", "synchronization", "baseline"],
+                  "estimated_runtime": "fast",
+                  "input_schema": "schemas/generic_config.json",
+                  "dependencies": ["pytest", "json"],
+                  "requires_state_data": false,
+                  "requires_traffic_data": false,
+                  "applicable_frameworks": ["STIG", "NIST-800-53", "PCI-DSS"]
+                }
+              ]
+            },
+            "state_checks": {
+              "description": "Generic operational state validation",
+              "framework": "pyats",
+              "path": "general/state",
+              "tests": []
+            },
+            "traffic_tests": {
+              "description": "Generic traffic flow validation",
+              "framework": "batfish",
+              "path": "general/traffic",
+              "tests": []
             }
-          ]
+          }
         }
       }
     }
+  },
+  "test_type_definitions": {
+    "data_validation": {
+      "description": "Configuration compliance validation using pytest and JSON schema validation",
+      "typical_frameworks": ["pytest", "pydantic", "jsonschema"],
+      "input_required": "structured_config",
+      "output_format": "pytest_junit_xml"
+    },
+    "state_checks": {
+      "description": "Operational state validation using pyATS/Genie parsers and operational commands",
+      "typical_frameworks": ["pyats", "genie", "napalm"],
+      "input_required": "operational_state",
+      "output_format": "pytest_junit_xml"
+    },
+    "traffic_tests": {
+      "description": "Traffic flow analysis and security policy validation using Batfish or similar tools",
+      "typical_frameworks": ["batfish", "pybatfish"],
+      "input_required": "configs_and_topology",
+      "output_format": "pytest_junit_xml"
+    }
+  },
+  "query_examples": {
+    "by_framework": "Select all tests where framework='STIG'",
+    "by_platform": "Select all tests where platform='cisco-ios-xe'",
+    "by_test_type": "Select all tests where test_type='data_validation'",
+    "by_severity": "Select all tests where severity='high' or severity='critical'",
+    "by_control_id": "Select test where control_id='CISC-ND-001210'",
+    "combined": "Select all tests where framework='STIG' AND platform='cisco-ios-xe' AND test_type='data_validation' AND severity='high'"
   }
 }
