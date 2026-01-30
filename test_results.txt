@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/leevanginkel/hai-tests/hai-network-tests/venv/bin/python3.13
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.3', 'Platform': 'macOS-15.7.3-arm64-arm-64bit-Mach-O', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'json-report': '1.5.0', 'metadata': '3.1.1', 'html': '4.2.0'}, 'CI': '1'}
+rootdir: /Users/leevanginkel/hai-tests/hai-network-tests
+plugins: json-report-1.5.0, metadata-3.1.1, html-4.2.0
+collecting ... collected 7 items
+
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000040.py::test_asa_logging_and_acl_deny_logging PASSED [ 14%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000050.py::test_asa_logging_timestamp PASSED [ 28%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000090.py::test_asa_logging_buffered_and_queue PASSED [ 42%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000100.py::test_asa_logging_tcp_and_permit_hostdown FAILED [ 57%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000130.py::test_asa_no_unnecessary_services FAILED [ 71%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000150.py::test_asa_threat_detection_enabled PASSED [ 85%]
+stig/nso/cisco-asa-firewall/nso-CASA-FW-000200.py::test_asa_central_syslog_server PASSED [100%]
+
+=========================== short test summary info ============================
+FAILED stig/nso/cisco-asa-firewall/nso-CASA-FW-000100.py::test_asa_logging_tcp_and_permit_hostdown - AssertionError: Device HAI-HQ-FW is not compliant with STIG CASA-FW-000100:
+  - No logging host configured with TCP (protocol 6)
+    Found 1 host(s) using non-TCP protocols:
+      outside 10.0.0.1 (protocol: UDP (default))
+  
+  Required configuration:
+    ASA(config)# logging host <interface> <ip-address> 6/<port>
+    ASA(config)# logging permit-hostdown
+assert False
+FAILED stig/nso/cisco-asa-firewall/nso-CASA-FW-000130.py::test_asa_no_unnecessary_services - AssertionError: Device HAI-HQ-FW is not compliant with STIG CASA-FW-000130:
+  ✗ CRITICAL: Telnet is enabled (1 entry/entries)
+    Telnet must NEVER be enabled (insecure protocol)
+      telnet N/A N/A N/A
+  
+  ⚠ Warning: 2 potentially unauthorized service(s) detected:
+      FTP (mode: passive) - may be unauthorized
+      DHCP server - verify if authorized for this firewall role
+    Review these services against the firewall's documented role
+  
+  Required action:
+    ASA(config)# no telnet <ip> <mask> <interface>
+assert False
+========================= 2 failed, 5 passed in 0.02s ==========================

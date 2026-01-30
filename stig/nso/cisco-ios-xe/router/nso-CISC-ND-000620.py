@@ -1,10 +1,13 @@
-#!/usr/bin/env python3
 """
-Test for STIG ID: CISC-ND-000620
+STIG ID: CISC-ND-000620
+Finding ID: V-215687
+Severity: High
+STIG Title: The Cisco router must only store cryptographic representations of passwords
 """
 
 import os
 import json
+import yaml
 import pytest
 
 STIG_ID = "CISC-ND-000620"
@@ -15,6 +18,32 @@ CATEGORY = "STIG"
 PLATFORM = "ios-xe-router-ndm"
 TITLE = "The Cisco router must only store cryptographic representations of passwords"
 
+
+def load_test_data(file_path):
+    """Load test data from JSON or YAML file."""
+    if not file_path or not os.path.exists(file_path):
+        pytest.fail(f"Test input file not found: {file_path}")
+    
+    with open(file_path, 'r') as f:
+        if file_path.endswith('.yaml') or file_path.endswith('.yml'):
+            data = yaml.safe_load(f)
+        else:
+            data = json.load(f)
+    
+    # Handle both formats:
+    # Format 1: {device_name: {tailf-ncs:config: {...}}} - wrapped
+    # Format 2: {tailf-ned-cisco-ios:hostname: ..., tailf-ned-cisco-ios:service: ...} - direct NSO config
+    
+    # Check if this is a direct NSO config (has tailf-ned-cisco-ios keys at top level)
+    if isinstance(data, dict) and any(k.startswith('tailf-ned-cisco-ios:') for k in data.keys()):
+        # Direct NSO config - wrap it with a device name
+        device_name = data.get('tailf-ned-cisco-ios:hostname', 'unknown-device')
+        # Wrap in expected format
+        return {device_name: {'tailf-ncs:config': data}}
+    
+    return data
+
+
 def test_password_encryption_enabled():
     """
     Test that password encryption is enabled on all devices.
@@ -24,25 +53,13 @@ def test_password_encryption_enabled():
     for the presence of the "password-encryption" service in the configuration.
     """
     # Get the path to the test input file
-    test_input_json = os.environ.get('TEST_INPUT_JSON', None)
+    test_input_file = os.environ.get('TEST_INPUT_JSON', None)
     
-    # If TEST_INPUT_JSON environment variable is set, use it
-    if test_input_json and os.path.exists(test_input_json):
-        with open(test_input_json, 'r') as f:
-            devices = json.load(f)
-    else:
-        # Otherwise, look for device configs in the config directory
-        config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config')
-        devices = {}
-        
-        for filename in os.listdir(config_dir):
-            if filename.endswith('.json'):
-                device_name = filename.split('.')[0]
-                with open(os.path.join(config_dir, filename), 'r') as f:
-                    try:
-                        devices[device_name] = json.load(f)
-                    except json.JSONDecodeError:
-                        print(f"Error: Could not parse {filename} as JSON")
+    if not test_input_file:
+        pytest.skip("TEST_INPUT_JSON environment variable not set")
+    
+    # Load the data (supports both JSON and YAML)
+    devices = load_test_data(test_input_file)
     
     # Dictionary to store results
     results = {}
@@ -86,6 +103,7 @@ def test_password_encryption_enabled():
                 print(f"  Error: {result['error']}")
             else:
                 print("  Password encryption service is not enabled")
+
 
 if __name__ == "__main__":
     test_password_encryption_enabled()

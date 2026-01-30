@@ -1,4 +1,14 @@
-#!/usr/bin/env python3
+"""
+STIG ID: CISC-ND-001210
+Finding ID: V-220556
+Severity: High
+STIG Title: Cisco IOS XE Router NDM — Use Secure Protocols for Remote Access
+"""
+
+import os
+import json
+import yaml
+import pytest
 
 STIG_ID = "CISC-ND-001210"
 FINDING_ID = "V-220556"
@@ -6,21 +16,31 @@ RULE_ID = "SV-220556r961557_rule"
 SEVERITY = "High"
 CATEGORY = "STIG"
 PLATFORM = "ios-xe-router-ndm"
-TITLE = "Ensure SSH version 2 and secure password configurations"
+TITLE = "Ensure SSH and FIPS-approved encryption algorithms are configured"
 
-import json
-import os
-import re
-import pytest
+
+def load_test_data(file_path):
+    """Load test data from JSON or YAML file."""
+    if not file_path or not os.path.exists(file_path):
+        pytest.fail(f"Test input file not found: {file_path}")
+    
+    with open(file_path, 'r') as f:
+        if file_path.endswith('.yaml') or file_path.endswith('.yml'):
+            return yaml.safe_load(f)
+        else:
+            return json.load(f)
 
 
 def test_ssh_security():
     """Test SSH security configurations."""
-    # Load device state data from the input JSON file
-    input_file = os.environ.get("TEST_INPUT_JSON", "test_input.json")
+    # Get the path to the test input file
+    test_input_file = os.environ.get('TEST_INPUT_JSON', None)
     
-    with open(input_file, "r") as f:
-        test_data = json.load(f)
+    if not test_input_file:
+        pytest.skip("TEST_INPUT_JSON environment variable not set")
+    
+    # Load the data (supports both JSON and YAML)
+    test_data = load_test_data(test_input_file)
     
     # Track test results for each device
     results = {}
@@ -84,3 +104,7 @@ def test_ssh_security():
     
     # Assert that all devices pass all checks
     assert not failures, error_message
+
+
+if __name__ == "__main__":
+    test_ssh_security()

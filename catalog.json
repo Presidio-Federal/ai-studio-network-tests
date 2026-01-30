@@ -3,63 +3,122 @@
   "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
   "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2026-01-29T00:00:00Z",
+  "last_updated": "2026-01-30T07:20:28Z",
   "schema_version": "2.0",
   "metadata": {
     "purpose": "Centralized compliance testing repository for network infrastructure",
     "ai_agent_compatible": true,
-    "query_capabilities": ["framework", "platform", "test_type", "severity", "control_id"],
-    "supported_extraction_methods": ["cli_structured", "api_native", "nso", "netconf", "restconf"]
+    "query_capabilities": [
+      "framework",
+      "platform",
+      "test_type",
+      "severity",
+      "control_id"
+    ],
+    "supported_extraction_methods": [
+      "cli_structured",
+      "api_native",
+      "nso",
+      "netconf",
+      "restconf"
+    ]
   },
   "platform_registry": {
     "cisco-ios-xe": {
       "vendor": "cisco",
       "os_family": "ios",
       "display_name": "Cisco IOS XE",
-      "extraction_methods": ["cli_structured", "netconf", "restconf", "nso"],
-      "parsers": ["textfsm", "genie", "ttp"]
+      "extraction_methods": [
+        "cli_structured",
+        "netconf",
+        "restconf",
+        "nso"
+      ],
+      "parsers": [
+        "textfsm",
+        "genie",
+        "ttp"
+      ]
     },
     "cisco-nxos": {
       "vendor": "cisco",
       "os_family": "nxos",
       "display_name": "Cisco NX-OS",
-      "extraction_methods": ["cli_structured", "nxapi", "netconf", "nso"],
-      "parsers": ["textfsm", "genie", "ttp"]
+      "extraction_methods": [
+        "cli_structured",
+        "nxapi",
+        "netconf",
+        "nso"
+      ],
+      "parsers": [
+        "textfsm",
+        "genie",
+        "ttp"
+      ]
     },
     "juniper-junos": {
       "vendor": "juniper",
       "os_family": "junos",
       "display_name": "Juniper Junos",
-      "extraction_methods": ["cli_structured", "netconf", "pyez"],
-      "parsers": ["textfsm", "jsnapy"]
+      "extraction_methods": [
+        "cli_structured",
+        "netconf",
+        "pyez"
+      ],
+      "parsers": [
+        "textfsm",
+        "jsnapy"
+      ]
     },
     "cisco-sdwan": {
       "vendor": "cisco",
       "os_family": "sdwan",
       "display_name": "Cisco SD-WAN (Viptela)",
-      "extraction_methods": ["api_native", "vmanage_api"],
-      "parsers": ["api_native"]
+      "extraction_methods": [
+        "api_native",
+        "vmanage_api"
+      ],
+      "parsers": [
+        "api_native"
+      ]
     },
     "cisco-dnac": {
       "vendor": "cisco",
       "os_family": "controller",
       "display_name": "Cisco DNA Center",
-      "extraction_methods": ["api_native", "dnac_api"],
-      "parsers": ["api_native"]
+      "extraction_methods": [
+        "api_native",
+        "dnac_api"
+      ],
+      "parsers": [
+        "api_native"
+      ]
     },
     "nso": {
       "vendor": "cisco",
       "os_family": "orchestrator",
       "display_name": "Cisco Network Services Orchestrator",
-      "extraction_methods": ["api_native", "restconf", "netconf"],
-      "parsers": ["api_native"]
+      "extraction_methods": [
+        "api_native",
+        "restconf",
+        "netconf"
+      ],
+      "parsers": [
+        "api_native"
+      ]
     },
     "multi-vendor": {
       "vendor": "multiple",
       "os_family": "generic",
       "display_name": "Multi-Vendor Generic Tests",
-      "extraction_methods": ["cli_structured", "api_native"],
-      "parsers": ["textfsm", "genie"]
+      "extraction_methods": [
+        "cli_structured",
+        "api_native"
+      ],
+      "parsers": [
+        "textfsm",
+        "genie"
+      ]
     }
   },
   "compliance_frameworks": {
@@ -68,50 +127,1038 @@
       "authority": "DISA",
       "description": "Department of Defense security configuration standards",
       "url": "https://public.cyber.mil/stigs/",
-      "platforms": {
-        "cisco-ios-xe": {
-          "platform_variant": "switch-ndm",
-          "stig_version": "V2R9",
-          "test_types": {
-            "data_validation": {
-              "description": "Configuration validation using pytest and structured data",
-              "framework": "pytest",
-              "path": "stig/ios-xe-switch-ndm",
-              "tests": [
-                {
-                  "id": "stig-iosxe-v220556-dv-001",
-                  "name": "CISC-ND-001210.py",
-                  "description": "Ensure SSH version 2 and FIPS-approved encryption algorithms are configured instead of insecure protocols like Telnet or HTTP.",
-                  "test_type": "data_validation",
-                  "framework": "STIG",
-                  "platform": "cisco-ios-xe",
-                  "control_id": "CISC-ND-001210",
-                  "finding_id": "V-220556",
-                  "rule_id": "SV-220556r961557_rule",
-                  "severity": "high",
-                  "stig_date": "2025-02-20",
-                  "tags": ["ssh", "encryption", "stig", "fips", "remote-access"],
-                  "estimated_runtime": "fast",
-                  "input_schema": "schemas/cisco_ios_xe_config.json",
-                  "dependencies": ["pytest", "json"],
-                  "requires_state_data": false,
-                  "requires_traffic_data": false
+      "note": "Tests are organized by data extraction method (nso, native, api) then by vendor/platform",
+      "extraction_methods": {
+        "nso": {
+          "method_name": "Cisco Network Services Orchestrator (NSO)",
+          "description": "Tests that consume NSO data models (tailf-ncs:config structure)",
+          "data_format": "NSO YANG model JSON",
+          "vendors": {
+            "cisco": {
+              "platforms": {
+                "asa": {
+                  "device_types": {
+                    "firewall": {
+                      "stig_variant": "asa-firewall",
+                      "stig_version": "V2R1",
+                      "full_name": "Cisco ASA Firewall STIG (NSO)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest against NSO data models",
+                          "framework": "pytest",
+                          "path": "stig/nso/cisco-asa-firewall",
+                          "tests": [
+                            {
+                              "id": "stig-nso-asa-fw-v239855-dv-001",
+                              "name": "nso-CASA-FW-000040.py",
+                              "description": "The Cisco ASA must generate traffic log entries containing information to establish what type of events occurred.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000040",
+                              "finding_id": "V-239855",
+                              "rule_id": "SV-239855r665851_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "audit",
+                                "acl",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239856-dv-001",
+                              "name": "nso-CASA-FW-000050.py",
+                              "description": "The Cisco ASA must generate traffic log entries containing information to establish when (date and time) the events occurred.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000050",
+                              "finding_id": "V-239856",
+                              "rule_id": "SV-239856r665854_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "timestamp",
+                                "audit",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239857-dv-001",
+                              "name": "nso-CASA-FW-000090.py",
+                              "description": "The Cisco ASA must queue log records locally in the event that the central audit server is down or not reachable.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000090",
+                              "finding_id": "V-239857",
+                              "rule_id": "SV-239857r665857_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "buffered",
+                                "queue",
+                                "audit",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239858-dv-001",
+                              "name": "nso-CASA-FW-000100.py",
+                              "description": "The Cisco ASA must use TCP when sending log records to the central audit server.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000100",
+                              "finding_id": "V-239858",
+                              "rule_id": "SV-239858r819136_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "tcp",
+                                "syslog",
+                                "audit",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239859-dv-001",
+                              "name": "nso-CASA-FW-000130.py",
+                              "description": "The Cisco ASA must disable or remove unnecessary network services and functions that are not used as part of its role in the architecture.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000130",
+                              "finding_id": "V-239859",
+                              "rule_id": "SV-239859r665863_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "services",
+                                "telnet",
+                                "hardening",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239860-dv-001",
+                              "name": "nso-CASA-FW-000150.py",
+                              "description": "The Cisco ASA must enable threat detection to mitigate risks of denial-of-service (DoS) attacks.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000150",
+                              "finding_id": "V-239860",
+                              "rule_id": "SV-239860r991796_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "threat-detection",
+                                "dos",
+                                "security",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:threat-detection",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239862-dv-001",
+                              "name": "nso-CASA-FW-000200.py",
+                              "description": "The Cisco ASA must send log data of denied traffic to a central audit server for analysis.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000200",
+                              "finding_id": "V-239862",
+                              "rule_id": "SV-239862r953982_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "syslog",
+                                "central-audit",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239863-dv-001",
+                              "name": "nso-CASA-FW-000210.py",
+                              "description": "The Cisco ASA must generate a real-time alert to organization-defined personnel if communication with the central audit server is lost.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000210",
+                              "finding_id": "V-239863",
+                              "rule_id": "SV-239863r855805_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "logging",
+                                "email",
+                                "alerts",
+                                "smtp",
+                                "audit",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239864-dv-001",
+                              "name": "nso-CASA-FW-000220.py",
+                              "description": "The Cisco ASA must implement scanning threat detection.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000220",
+                              "finding_id": "V-239864",
+                              "rule_id": "SV-239864r891328_rule",
+                              "severity": "high",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "threat-detection",
+                                "scanning",
+                                "port-scan",
+                                "dos",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:threat-detection",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-asa-fw-v239869-dv-001",
+                              "name": "nso-CASA-FW-000270.py",
+                              "description": "The Cisco ASA must inspect all inbound and outbound traffic at the application layer.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "asa",
+                              "device_type": "firewall",
+                              "control_id": "CASA-FW-000270",
+                              "finding_id": "V-239869",
+                              "rule_id": "SV-239869r665893_rule",
+                              "severity": "medium",
+                              "stig_date": "2024-07-24",
+                              "tags": [
+                                "inspection",
+                                "application-layer",
+                                "service-policy",
+                                "security",
+                                "stig",
+                                "firewall",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_asa.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-asa:service-policy",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        },
+                        "state_checks": {
+                          "description": "Operational state validation using pyATS/Genie",
+                          "framework": "pyats",
+                          "path": "stig/nso/cisco-asa-firewall/state",
+                          "tests": []
+                        },
+                        "traffic_tests": {
+                          "description": "Traffic flow and security policy validation",
+                          "framework": "batfish",
+                          "path": "stig/nso/cisco-asa-firewall/traffic",
+                          "tests": []
+                        }
+                      }
+                    }
+                  }
+                },
+                "ios-xe": {
+                  "device_types": {
+                    "router": {
+                      "stig_variant": "router-ndm",
+                      "stig_version": "V2R9",
+                      "full_name": "Cisco IOS XE Router NDM STIG (NSO)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest against NSO data models",
+                          "framework": "pytest",
+                          "path": "stig/nso/cisco-ios-xe/router",
+                          "tests": [
+                            {
+                              "id": "stig-nso-iosxe-router-v220556-dv-001",
+                              "name": "nso-CISC-ND-001210.py",
+                              "description": "Ensure SSH version 2 and secure password configurations on router platforms.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-001210",
+                              "finding_id": "V-220556",
+                              "rule_id": "SV-220556r961557_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "ssh",
+                                "encryption",
+                                "stig",
+                                "passwords",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios",
+                              "dependencies": [
+                                "pytest",
+                                "json"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215664-dv-001",
+                              "name": "nso-CISC-ND-000100.py",
+                              "description": "The Cisco router must be configured to automatically audit account modification.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000100",
+                              "finding_id": "V-215664",
+                              "rule_id": "SV-215664r960780_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "account-management",
+                                "audit",
+                                "logging",
+                                "archive",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:archive.log.config.logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215662-dv-001",
+                              "name": "nso-CISC-ND-000010.py",
+                              "description": "The Cisco router must be configured to limit the number of concurrent management sessions to an organization-defined number.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000010",
+                              "finding_id": "V-215662",
+                              "rule_id": "SV-215662r1050869_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "concurrent-sessions",
+                                "access-control",
+                                "dos-prevention",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:ip.http",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215687-dv-001",
+                              "name": "nso-CISC-ND-000620.py",
+                              "description": "The Cisco router must only store cryptographic representations of passwords (password encryption service).",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000620",
+                              "finding_id": "V-215687",
+                              "rule_id": "SV-215687r991830_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "passwords",
+                                "encryption",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.password-encryption",
+                              "dependencies": [
+                                "pytest",
+                                "json"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215688-dv-001",
+                              "name": "nso-CISC-ND-000720.py",
+                              "description": "The Cisco router must be configured to terminate all network connections associated with device management after five minutes of inactivity.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000720",
+                              "finding_id": "V-215688",
+                              "rule_id": "SV-215688r961068_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "timeout",
+                                "session-management",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:line",
+                              "dependencies": [
+                                "pytest",
+                                "json"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215668-dv-001",
+                              "name": "nso-CISC-ND-000150.py",
+                              "description": "The Cisco router must enforce the limit of three consecutive invalid logon attempts, after which time it must lock out the user account for 15 minutes.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000150",
+                              "finding_id": "V-215668",
+                              "rule_id": "SV-215668r960840_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "login-attempts",
+                                "brute-force-protection",
+                                "account-lockout",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:login.block-for",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215672-dv-001",
+                              "name": "nso-CISC-ND-000280.py",
+                              "description": "The Cisco router must produce audit records containing information to establish when (date and time) the events occurred.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000280",
+                              "finding_id": "V-215672",
+                              "rule_id": "SV-215672r960894_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "timestamps",
+                                "audit",
+                                "logging",
+                                "datetime",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.timestamps.log.datetime",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        },
+                        "state_checks": {
+                          "description": "Operational state validation using pyATS/Genie",
+                          "framework": "pyats",
+                          "path": "stig/nso/cisco-ios-xe/router/state",
+                          "tests": []
+                        },
+                        "traffic_tests": {
+                          "description": "Traffic flow and security policy validation",
+                          "framework": "batfish",
+                          "path": "stig/nso/cisco-ios-xe/router/traffic",
+                          "tests": []
+                        }
+                      }
+                    },
+                    "switch": {
+                      "stig_variant": "switch-ndm",
+                      "stig_version": "V2R9",
+                      "full_name": "Cisco IOS XE Switch NDM STIG (NSO)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest against NSO data models",
+                          "framework": "pytest",
+                          "path": "stig/nso/cisco-ios-xe/switch",
+                          "tests": [
+                            {
+                              "id": "stig-nso-iosxe-switch-v220556-dv-001",
+                              "name": "nso-CISC-ND-001210.py",
+                              "description": "Ensure SSH version 2 and FIPS-approved encryption algorithms are configured instead of insecure protocols like Telnet or HTTP.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "switch",
+                              "control_id": "CISC-ND-001210",
+                              "finding_id": "V-220556",
+                              "rule_id": "SV-220556r961557_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "ssh",
+                                "encryption",
+                                "stig",
+                                "fips",
+                                "remote-access",
+                                "switch",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios",
+                              "dependencies": [
+                                "pytest",
+                                "json"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-switch-v215844-dv-001",
+                              "name": "nso-CISC-ND-001200.py",
+                              "description": "The Cisco switch must be configured to use FIPS-validated Keyed-Hash Message Authentication Code (HMAC) to protect the integrity of remote maintenance sessions.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "switch",
+                              "control_id": "CISC-ND-001200",
+                              "finding_id": "V-215844",
+                              "rule_id": "SV-215844r961554_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "ssh",
+                                "hmac",
+                                "fips",
+                                "integrity",
+                                "remote-access",
+                                "switch",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios",
+                              "dependencies": [
+                                "pytest",
+                                "json"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        },
+                        "state_checks": {
+                          "description": "Operational state validation using pyATS/Genie",
+                          "framework": "pyats",
+                          "path": "stig/nso/cisco-ios-xe/switch/state",
+                          "tests": []
+                        },
+                        "traffic_tests": {
+                          "description": "Traffic flow and security policy validation",
+                          "framework": "batfish",
+                          "path": "stig/nso/cisco-ios-xe/switch/traffic",
+                          "tests": []
+                        }
+                      }
+                    }
+                  }
                 }
-              ]
-            },
-            "state_checks": {
-              "description": "Operational state validation using pyATS/Genie",
-              "framework": "pyats",
-              "path": "stig/ios-xe-switch-ndm/state",
-              "tests": []
-            },
-            "traffic_tests": {
-              "description": "Traffic flow and security policy validation",
-              "framework": "batfish",
-              "path": "stig/ios-xe-switch-ndm/traffic",
-              "tests": []
+              }
             }
           }
+        },
+        "native": {
+          "method_name": "Native CLI/Config",
+          "description": "Tests that consume raw device configurations (show running-config output)",
+          "data_format": "Raw CLI text or parsed structured data (TextFSM, Genie, TTP)",
+          "vendors": {
+            "cisco": {
+              "platforms": {
+                "ios-xe": {
+                  "device_types": {
+                    "router": {
+                      "stig_variant": "router-ndm",
+                      "stig_version": "V2R9",
+                      "full_name": "Cisco IOS XE Router NDM STIG (Native)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest against native CLI/API JSON",
+                          "framework": "pytest",
+                          "path": "stig/native/cisco-ios-xe-router",
+                          "tests": [
+                            {
+                              "id": "stig-native-iosxe-router-v215664-dv-001",
+                              "name": "native-CISC-ND-000100.py",
+                              "description": "The Cisco router must be configured to automatically audit account modification.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000100",
+                              "finding_id": "V-215664",
+                              "rule_id": "SV-215664r960780_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "account-management",
+                                "audit",
+                                "logging",
+                                "archive",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:archive.log.config.logging",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215662-dv-001",
+                              "name": "native-CISC-ND-000010.py",
+                              "description": "The Cisco router must be configured to limit the number of concurrent management sessions to an organization-defined number.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000010",
+                              "finding_id": "V-215662",
+                              "rule_id": "SV-215662r1050869_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "concurrent-sessions",
+                                "access-control",
+                                "dos-prevention",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:ip.http",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215687-dv-001",
+                              "name": "native-CISC-ND-000620.py",
+                              "description": "The Cisco router must only store cryptographic representations of passwords (password encryption service).",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000620",
+                              "finding_id": "V-215687",
+                              "rule_id": "SV-215687r991830_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "passwords",
+                                "encryption",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.password-encryption",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215688-dv-001",
+                              "name": "native-CISC-ND-000720.py",
+                              "description": "The Cisco router must be configured to terminate all network connections associated with device management after five minutes of inactivity.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000720",
+                              "finding_id": "V-215688",
+                              "rule_id": "SV-215688r961068_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "timeout",
+                                "session-management",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:line",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v220556-dv-001",
+                              "name": "native-CISC-ND-001210.py",
+                              "description": "The Cisco router must be configured to use SSH version 2 and FIPS-approved encryption algorithms.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-001210",
+                              "finding_id": "V-220556",
+                              "rule_id": "SV-220556r961557_rule",
+                              "severity": "high",
+                              "stig_date": "2025-02-20",
+                              "tags": [
+                                "ssh",
+                                "encryption",
+                                "stig",
+                                "passwords",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:ip.ssh",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215668-dv-001",
+                              "name": "native-CISC-ND-000150.py",
+                              "description": "The Cisco router must enforce the limit of three consecutive invalid logon attempts, after which time it must lock out the user account for 15 minutes.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000150",
+                              "finding_id": "V-215668",
+                              "rule_id": "SV-215668r960840_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "login-attempts",
+                                "brute-force-protection",
+                                "account-lockout",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:login.block-for",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215672-dv-001",
+                              "name": "native-CISC-ND-000280.py",
+                              "description": "The Cisco router must produce audit records containing information to establish when (date and time) the events occurred.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000280",
+                              "finding_id": "V-215672",
+                              "rule_id": "SV-215672r960894_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "timestamps",
+                                "audit",
+                                "logging",
+                                "datetime",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.timestamps.log.datetime",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        },
+                        "state_checks": {
+                          "description": "Operational state validation using pyATS/Genie",
+                          "framework": "pyats",
+                          "path": "stig/native/cisco-ios-xe-router/state",
+                          "tests": []
+                        },
+                        "traffic_tests": {
+                          "description": "Traffic flow and security policy validation",
+                          "framework": "batfish",
+                          "path": "stig/native/cisco-ios-xe-router/traffic",
+                          "tests": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "api": {
+          "method_name": "Vendor API",
+          "description": "Tests that consume vendor-specific API data (DNAC, SD-WAN vManage, etc.)",
+          "data_format": "Vendor REST API JSON responses",
+          "vendors": {}
         }
       }
     },
@@ -143,10 +1190,19 @@
                       "architecture": "eg-dr",
                       "control_id": "CSfC-EG-DR-001",
                       "severity": "high",
-                      "tags": ["csfc", "eg-dr", "encryption", "vpn", "ipsec"],
+                      "tags": [
+                        "csfc",
+                        "eg-dr",
+                        "encryption",
+                        "vpn",
+                        "ipsec"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest", "json"],
+                      "dependencies": [
+                        "pytest",
+                        "json"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     }
@@ -190,10 +1246,18 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-001",
                       "severity": "high",
-                      "tags": ["csfc", "eg-fw", "firewall", "access-control"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw",
+                        "firewall",
+                        "access-control"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest", "json"],
+                      "dependencies": [
+                        "pytest",
+                        "json"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -207,10 +1271,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-002",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -224,10 +1293,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-003",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -241,10 +1315,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-004",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -258,10 +1337,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-005",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -275,10 +1359,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-006",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -292,10 +1381,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-011",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -309,10 +1403,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-012",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -326,10 +1425,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-013",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -343,10 +1447,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-015",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -360,10 +1469,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-016",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -377,10 +1491,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-019",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -394,10 +1513,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-020",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     },
@@ -411,10 +1535,15 @@
                       "architecture": "eg-fw",
                       "control_id": "CSfC-EG-FW-021",
                       "severity": "medium",
-                      "tags": ["csfc", "eg-fw"],
+                      "tags": [
+                        "csfc",
+                        "eg-fw"
+                      ],
                       "estimated_runtime": "medium",
                       "input_schema": "schemas/juniper_junos_config.json",
-                      "dependencies": ["pytest"],
+                      "dependencies": [
+                        "pytest"
+                      ],
                       "requires_state_data": false,
                       "requires_traffic_data": false
                     }
@@ -452,7 +1581,263 @@
       "description": "Security standards for organizations that handle credit card data",
       "url": "https://www.pcisecuritystandards.org/",
       "version": "4.0",
-      "platforms": {}
+      "platforms": {},
+      "extraction_methods": {
+        "nso": {
+          "method_name": "Cisco Network Services Orchestrator (NSO)",
+          "description": "Tests that consume NSO data models",
+          "data_format": "NSO YANG model JSON/YAML",
+          "vendors": {
+            "cisco": {
+              "platforms": {
+                "ios-xe": {
+                  "device_types": {
+                    "router": {
+                      "pci_version": "4.0",
+                      "full_name": "Cisco IOS XE Router PCI-DSS Compliance (NSO)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest",
+                          "framework": "pytest",
+                          "path": "pci-dss/nso/cisco-ios-xe-router",
+                          "tests": [
+                            {
+                              "id": "pci-nso-iosxe-router-8.3.6-dv-001",
+                              "name": "nso_pci_8_3_6_account_lockout.py",
+                              "description": "Account lockout duration must be at least 30 minutes after failed authentication attempts per PCI-DSS 8.3.6.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-8.3.6",
+                              "pci_requirement": "8.3.6",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "account-lockout",
+                                "authentication",
+                                "brute-force-protection",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:login.block-for",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "pci-nso-iosxe-router-10.3.4-dv-001",
+                              "name": "nso_pci_10_3_4_log_timestamps.py",
+                              "description": "Date and time must be included in all audit log entries per PCI-DSS 10.3.4.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-10.3.4",
+                              "pci_requirement": "10.3.4",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "timestamps",
+                                "audit-logging",
+                                "compliance",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.timestamps.log.datetime",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "pci-nso-iosxe-router-2.2.2-dv-001",
+                              "name": "nso_pci_2_2_2_password_encryption.py",
+                              "description": "Vendor default accounts and passwords must be managed; all passwords must be encrypted per PCI-DSS 2.2.2.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-2.2.2",
+                              "pci_requirement": "2.2.2",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "password-encryption",
+                                "vendor-defaults",
+                                "security-hardening",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.password-encryption",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "native": {
+          "method_name": "Native CLI/Config",
+          "description": "Tests that consume native CLI/API configurations",
+          "data_format": "Raw CLI text or parsed JSON",
+          "vendors": {
+            "cisco": {
+              "platforms": {
+                "ios-xe": {
+                  "device_types": {
+                    "router": {
+                      "pci_version": "4.0",
+                      "full_name": "Cisco IOS XE Router PCI-DSS Compliance (Native)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest",
+                          "framework": "pytest",
+                          "path": "pci-dss/native/cisco-ios-xe-router",
+                          "tests": [
+                            {
+                              "id": "pci-native-iosxe-router-8.3.6-dv-001",
+                              "name": "native_pci_8_3_6_account_lockout.py",
+                              "description": "Account lockout duration must be at least 30 minutes after failed authentication attempts per PCI-DSS 8.3.6.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-8.3.6",
+                              "pci_requirement": "8.3.6",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "account-lockout",
+                                "authentication",
+                                "brute-force-protection",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:login.block-for",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "pci-native-iosxe-router-10.3.4-dv-001",
+                              "name": "native_pci_10_3_4_log_timestamps.py",
+                              "description": "Date and time must be included in all audit log entries per PCI-DSS 10.3.4.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-10.3.4",
+                              "pci_requirement": "10.3.4",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "timestamps",
+                                "audit-logging",
+                                "compliance",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.timestamps.log.datetime",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "pci-native-iosxe-router-2.2.2-dv-001",
+                              "name": "native_pci_2_2_2_password_encryption.py",
+                              "description": "Vendor default accounts and passwords must be managed; all passwords must be encrypted per PCI-DSS 2.2.2.",
+                              "test_type": "data_validation",
+                              "framework": "PCI-DSS",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "PCI-DSS-2.2.2",
+                              "pci_requirement": "2.2.2",
+                              "pci_version": "4.0",
+                              "severity": "high",
+                              "tags": [
+                                "pci-dss",
+                                "password-encryption",
+                                "vendor-defaults",
+                                "security-hardening",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.password-encryption",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "HIPAA": {
       "full_name": "Health Insurance Portability and Accountability Act",
@@ -464,10 +1849,141 @@
     "Purdue": {
       "full_name": "Purdue Model for Industrial Control Systems",
       "authority": "ISA/IEC",
-      "description": "Network segmentation model for industrial control systems (ICS/OT)",
+      "description": "Network segmentation model for industrial control systems (ICS/OT) with zone-based security controls",
       "url": "https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards",
-      "related_standards": ["IEC 62443", "ISA-95"],
-      "platforms": {}
+      "related_standards": [
+        "IEC 62443",
+        "ISA-95",
+        "NIST 800-53",
+        "NIST 800-82"
+      ],
+      "catalog_format": "yaml",
+      "catalog_location": "purdue/catalog/",
+      "note": "Purdue controls are organized by network zones/levels rather than device platforms. Each level has a YAML catalog with detailed controls.",
+      "levels": {
+        "level-3.5": {
+          "zone_name": "DMZ - Industrial Demilitarized Zone",
+          "description": "Buffer between enterprise IT (Level 4) and site operations/OT (Level 3). Primary security objectives: boundary protection, controlled data flow, monitoring, and remote access management.",
+          "catalog_file": "purdue/catalog/level-3.5.yml",
+          "test_path": "purdue/level-3.5/tests",
+          "control_count": 15,
+          "test_types": {
+            "data_validation": {
+              "description": "Configuration validation for DMZ boundary devices",
+              "framework": "pytest",
+              "path": "purdue/level-3.5/tests",
+              "tests": [
+                {
+                  "id": "purdue-l3.5-sc7-001",
+                  "name": "L3.5-SC7-001_test.py",
+                  "description": "SC-7(3) Boundary Protection / Network Segmentation - Ensure DMZ firewalls separate IT and OT networks with deny-by-default rules.",
+                  "test_type": "data_validation",
+                  "framework": "Purdue",
+                  "purdue_level": "3.5",
+                  "zone": "DMZ",
+                  "control_id": "L3.5-SC7-001",
+                  "nist_control": "SC-7(3)",
+                  "isa_62443_mapping": "SR 5.2 - Zone boundary protection",
+                  "severity": "high",
+                  "tags": [
+                    "purdue",
+                    "dmz",
+                    "boundary-protection",
+                    "segmentation",
+                    "firewall"
+                  ],
+                  "estimated_runtime": "medium",
+                  "dependencies": [
+                    "pytest",
+                    "batfish",
+                    "hai_tools"
+                  ],
+                  "requires_state_data": false,
+                  "requires_traffic_data": true,
+                  "validation_methods": [
+                    "batfish",
+                    "pyats",
+                    "acl-analysis"
+                  ]
+                }
+              ]
+            },
+            "state_checks": {
+              "description": "Operational state validation for DMZ zone devices",
+              "framework": "pyats",
+              "path": "purdue/level-3.5/state",
+              "tests": []
+            },
+            "traffic_tests": {
+              "description": "Traffic flow and zone boundary validation",
+              "framework": "batfish",
+              "path": "purdue/level-3.5/traffic",
+              "tests": []
+            }
+          },
+          "key_controls": [
+            "L3.5-SC7-001 - Boundary Protection",
+            "L3.5-AC4-002 - Information Flow Enforcement",
+            "L3.5-SI4-003 - System Monitoring / IDS",
+            "L3.5-AC17-004 - Remote Access Control",
+            "L3.5-AU2-005 - Audit Logging",
+            "L3.5-CM6-006 - Configuration Hardening",
+            "L3.5-SI7-007 - Software Integrity",
+            "L3.5-SC8-008 - Transmission Confidentiality",
+            "L3.5-IR4-009 - Incident Response",
+            "L3.5-AC2-010 - Account Management",
+            "L3.5-SC13-011 - Cryptographic Protection",
+            "L3.5-CM2-012 - Baseline Configuration",
+            "L3.5-AU6-013 - Audit Review",
+            "L3.5-PE4-014 - Physical Access Control",
+            "L3.5-SC23-015 - Session Authenticity"
+          ]
+        },
+        "level-4": {
+          "zone_name": "Enterprise IT",
+          "description": "Enterprise and business network above the industrial DMZ. Hosts corporate applications, authentication services, SOC tooling, and external connectivity.",
+          "catalog_file": "purdue/catalog/level-4.yml",
+          "test_path": "purdue/level-4/tests",
+          "control_count": 15,
+          "test_types": {
+            "data_validation": {
+              "description": "Configuration validation for enterprise IT systems",
+              "framework": "pytest",
+              "path": "purdue/level-4/tests",
+              "tests": []
+            },
+            "state_checks": {
+              "description": "Operational state validation for enterprise systems",
+              "framework": "pyats",
+              "path": "purdue/level-4/state",
+              "tests": []
+            },
+            "traffic_tests": {
+              "description": "Traffic flow validation for enterprise boundary",
+              "framework": "batfish",
+              "path": "purdue/level-4/traffic",
+              "tests": []
+            }
+          },
+          "key_controls": [
+            "L4-AC2-001 - Account Management",
+            "L4-AC17-002 - Remote Access Control",
+            "L4-AC19-003 - Mobile Device Control",
+            "L4-CM6-004 - Configuration Hardening",
+            "L4-SI2-005 - Patch Management",
+            "L4-SI4-006 - System Monitoring / SOC",
+            "L4-AU2-007 - Audit Logging",
+            "L4-SC7-008 - Boundary Protection",
+            "L4-SC8-009 - Transmission Protection",
+            "L4-SC28-010 - Data at Rest Protection",
+            "L4-IR4-011 - Incident Response",
+            "L4-PL8-012 - Security Architecture",
+            "L4-RA5-013 - Vulnerability Scanning",
+            "L4-CP9-014 - Backup and Recovery",
+            "L4-CA7-015 - Continuous Monitoring"
+          ]
+        }
+      }
     },
     "general": {
       "full_name": "General Baseline Security Tests",
@@ -483,20 +1999,74 @@
               "tests": [
                 {
                   "id": "general-multi-dv-ntp-001",
-                  "name": "general_ntp_test.py",
+                  "name": "test_ntp_servers.py",
                   "description": "Verify that devices have at least two reachable NTP servers configured and synchronized.",
                   "test_type": "data_validation",
                   "framework": "general",
                   "platform": "multi-vendor",
                   "control_id": "BASELINE-TIME-001",
                   "severity": "medium",
-                  "tags": ["ntp", "time", "synchronization", "baseline"],
+                  "tags": [
+                    "ntp",
+                    "time",
+                    "synchronization",
+                    "baseline"
+                  ],
                   "estimated_runtime": "fast",
                   "input_schema": "schemas/generic_config.json",
-                  "dependencies": ["pytest", "json"],
+                  "dependencies": [
+                    "pytest",
+                    "json"
+                  ],
                   "requires_state_data": false,
                   "requires_traffic_data": false,
-                  "applicable_frameworks": ["STIG", "NIST-800-53", "PCI-DSS"]
+                  "applicable_frameworks": [
+                    "STIG",
+                    "NIST-800-53",
+                    "PCI-DSS",
+                    "Purdue"
+                  ]
+                },
+                {
+                  "id": "general-multi-dv-passwords-001",
+                  "name": "test_no_cleartext_passwords.py",
+                  "description": "Validate that no cleartext passwords are present in device configurations. Checks for unencrypted line passwords, enable passwords, username passwords, SNMP community strings, and routing protocol authentication.",
+                  "test_type": "data_validation",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-AUTH-001",
+                  "severity": "high",
+                  "tags": [
+                    "passwords",
+                    "authentication",
+                    "encryption",
+                    "security",
+                    "baseline"
+                  ],
+                  "estimated_runtime": "fast",
+                  "input_schema": "schemas/generic_config.json",
+                  "dependencies": [
+                    "pytest",
+                    "json",
+                    "re"
+                  ],
+                  "requires_state_data": false,
+                  "requires_traffic_data": false,
+                  "applicable_frameworks": [
+                    "STIG",
+                    "NIST-800-53",
+                    "PCI-DSS",
+                    "HIPAA",
+                    "Purdue"
+                  ],
+                  "checks": [
+                    "Unencrypted line passwords (console, vty, aux)",
+                    "Enable passwords without encryption",
+                    "Username passwords without encryption",
+                    "SNMP community strings",
+                    "Plaintext routing protocol authentication",
+                    "Service password-encryption enabled"
+                  ]
                 }
               ]
             },
@@ -520,29 +2090,45 @@
   "test_type_definitions": {
     "data_validation": {
       "description": "Configuration compliance validation using pytest and JSON schema validation",
-      "typical_frameworks": ["pytest", "pydantic", "jsonschema"],
+      "typical_frameworks": [
+        "pytest",
+        "pydantic",
+        "jsonschema"
+      ],
       "input_required": "structured_config",
       "output_format": "pytest_junit_xml"
     },
     "state_checks": {
       "description": "Operational state validation using pyATS/Genie parsers and operational commands",
-      "typical_frameworks": ["pyats", "genie", "napalm"],
+      "typical_frameworks": [
+        "pyats",
+        "genie",
+        "napalm"
+      ],
       "input_required": "operational_state",
       "output_format": "pytest_junit_xml"
     },
     "traffic_tests": {
       "description": "Traffic flow analysis and security policy validation using Batfish or similar tools",
-      "typical_frameworks": ["batfish", "pybatfish"],
+      "typical_frameworks": [
+        "batfish",
+        "pybatfish"
+      ],
       "input_required": "configs_and_topology",
       "output_format": "pytest_junit_xml"
     }
   },
   "query_examples": {
     "by_framework": "Select all tests where framework='STIG'",
-    "by_platform": "Select all tests where platform='cisco-ios-xe'",
+    "by_extraction_method": "Select all tests where extraction_method='nso'",
+    "by_vendor": "Select all tests where vendor='cisco'",
+    "by_platform": "Select all tests where platform='ios-xe'",
+    "by_device_type": "Select all tests where device_type='router'",
     "by_test_type": "Select all tests where test_type='data_validation'",
     "by_severity": "Select all tests where severity='high' or severity='critical'",
     "by_control_id": "Select test where control_id='CISC-ND-001210'",
-    "combined": "Select all tests where framework='STIG' AND platform='cisco-ios-xe' AND test_type='data_validation' AND severity='high'"
+    "combined_basic": "Select all tests where framework='STIG' AND extraction_method='nso' AND vendor='cisco' AND platform='ios-xe'",
+    "combined_specific": "Select all tests where framework='STIG' AND extraction_method='nso' AND vendor='cisco' AND platform='ios-xe' AND device_type='router' AND severity='high'",
+    "ai_agent_workflow": "1. Agent extracts data from NSO \u2192 2. Identifies vendor=cisco, platform=ios-xe, device_type=router \u2192 3. Query: framework='STIG' AND extraction_method='nso' AND vendor='cisco' AND platform='ios-xe' AND device_type='router'"
   }
 }
