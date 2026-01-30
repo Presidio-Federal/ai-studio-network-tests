@@ -17,6 +17,8 @@ The repository supports multiple compliance frameworks, each with framework-spec
 - **HIPAA**: Security and privacy requirements for healthcare data
 - **Purdue Model**: Network segmentation standards for Industrial Control Systems (ICS/OT)
 
+**All tests map to NIST SP 800-53 Rev 5 controls**, enabling unified compliance reporting across frameworks. See [NIST Mappings Documentation](docs/NIST-MAPPINGS.md) for complete control mappings.
+
 ### Multi-Vendor and Multi-Platform Support
 
 Tests are organized by vendor, platform, and device role:
@@ -337,6 +339,8 @@ Each test in the catalog includes comprehensive metadata:
 
 - **Unique ID**: Globally unique identifier for the test
 - **Control ID**: Framework-specific control identifier (e.g., CISC-ND-000620, PCI-DSS-8.3.6)
+- **NIST Controls**: Mapped NIST SP 800-53 controls (e.g., AU-9a, IA-5(1)(c))
+- **CCI**: Control Correlation Identifier for cross-framework mapping
 - **Finding/Rule IDs**: Official framework identifiers for audit compliance
 - **Severity**: high, medium, low (or CAT I, CAT II, CAT III for STIG)
 - **Description**: Human-readable test purpose
@@ -345,6 +349,8 @@ Each test in the catalog includes comprehensive metadata:
 - **Data Path**: JSONPath to relevant configuration section
 - **Input Schema**: Expected data structure
 - **Runtime**: Estimated execution time (fast, medium, slow)
+
+**NIST Mappings**: All tests map to NIST SP 800-53 Rev 5 controls. See [NIST Mappings Documentation](docs/NIST-MAPPINGS.md) for complete mappings and [Quick Reference](docs/NIST-QUICK-REFERENCE.md) for quick lookup tables.
 
 ## Compliance Test Examples
 
@@ -639,6 +645,14 @@ When adding new tests:
 ## License
 
 This repository is maintained by Presidio Federal HAI Team for internal compliance validation purposes.
+
+## Documentation
+
+- **[README.md](README.md)**: Repository overview and usage guide (this file)
+- **[NIST Mappings](docs/NIST-MAPPINGS.md)**: Comprehensive NIST SP 800-53 control mappings with control descriptions
+- **[NIST Quick Reference](docs/NIST-QUICK-REFERENCE.md)**: Quick lookup tables for NIST controls and test files
+- **[NIST Mappings Data](docs/nist-800-53-mappings.json)**: Machine-readable NIST mapping data for AI agent queries
+- **[catalog.json](catalog.json)**: Complete test inventory with metadata
 
 ## Maintainer
 

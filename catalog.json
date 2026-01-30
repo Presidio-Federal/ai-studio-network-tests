@@ -3,7 +3,7 @@
   "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
   "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2026-01-30T07:20:28Z",
+  "last_updated": "2026-01-30T09:39:56Z",
   "schema_version": "2.0",
   "metadata": {
     "purpose": "Centralized compliance testing repository for network infrastructure",
@@ -758,6 +758,41 @@
                               ],
                               "requires_state_data": false,
                               "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-nso-iosxe-router-v215675-dv-001",
+                              "name": "nso-CISC-ND-000380.py",
+                              "description": "The Cisco router must be configured to protect audit information from unauthorized modification by restricting file system access to privilege level 15.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "nso",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000380",
+                              "finding_id": "V-215675",
+                              "rule_id": "SV-215675r960933_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "audit-protection",
+                                "file-privilege",
+                                "persistent-logging",
+                                "access-control",
+                                "stig",
+                                "router",
+                                "nso"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/nso_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:logging.persistent, tailf-ncs:config.tailf-ned-cisco-ios:file.privilege",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
                             }
                           ]
                         },
@@ -1124,6 +1159,41 @@
                               "estimated_runtime": "fast",
                               "input_schema": "schemas/native_cisco_ios_xe.json",
                               "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:service.timestamps.log.datetime",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-router-v215675-dv-001",
+                              "name": "native-CISC-ND-000380.py",
+                              "description": "The Cisco router must be configured to protect audit information from unauthorized modification by restricting file system access to privilege level 15.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "router",
+                              "control_id": "CISC-ND-000380",
+                              "finding_id": "V-215675",
+                              "rule_id": "SV-215675r960933_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-04-02",
+                              "tags": [
+                                "audit-protection",
+                                "file-privilege",
+                                "persistent-logging",
+                                "access-control",
+                                "stig",
+                                "router",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "tailf-ncs:config.tailf-ned-cisco-ios:logging.persistent, tailf-ncs:config.tailf-ned-cisco-ios:file.privilege",
                               "dependencies": [
                                 "pytest",
                                 "json",
