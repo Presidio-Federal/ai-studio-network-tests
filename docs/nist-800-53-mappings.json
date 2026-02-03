@@ -367,6 +367,22 @@
         "IA-5(1)(c)"
       ],
       "control_family": "IA"
+    },
+    "CCI-001619": {
+      "cci_id": "CCI-001619",
+      "definition": "The information system enforces password complexity by the minimum number of special characters used",
+      "nist_controls": [
+        "IA-5(1)(a)"
+      ],
+      "control_family": "IA"
+    },
+    "CCI-004066": {
+      "cci_id": "CCI-004066",
+      "definition": "For password-based authentication, enforce organization-defined composition and complexity rules",
+      "nist_controls": [
+        "IA-5(1)(h)"
+      ],
+      "control_family": "IA"
     }
   },
   "test_to_nist_mappings": {
@@ -639,6 +655,36 @@
       "description": "SSH concurrent session limits",
       "platform": "juniper-srx-gateway"
     },
+    "JUSX-DM-000087": {
+      "control_id": "JUSX-DM-000087",
+      "stig_finding": "V-223204",
+      "cci": [
+        "CCI-000366"
+      ],
+      "nist_controls": [
+        "CM-6b"
+      ],
+      "control_family": "CM",
+      "primary_control": "CM-6b",
+      "description": "Configuration rollback storage limit",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000106": {
+      "control_id": "JUSX-DM-000106",
+      "stig_finding": "V-229028",
+      "cci": [
+        "CCI-000366",
+        "CCI-000372"
+      ],
+      "nist_controls": [
+        "CM-6b",
+        "CM-6(1)"
+      ],
+      "control_family": "CM",
+      "primary_control": "CM-6b",
+      "description": "Syslog user terminal notification for critical events",
+      "platform": "juniper-srx-gateway"
+    },
     "JUSX-DM-000114": {
       "control_id": "JUSX-DM-000114",
       "stig_finding": "V-223214",
@@ -682,6 +728,85 @@
       "description": "SHA-256 or higher password format",
       "platform": "juniper-srx-gateway",
       "severity": "CAT I"
+    },
+    "JUSX-DM-000150": {
+      "control_id": "JUSX-DM-000150",
+      "stig_finding": "V-223227",
+      "cci": [
+        "CCI-003123"
+      ],
+      "nist_controls": [
+        "MA-4(6)"
+      ],
+      "control_family": "MA",
+      "primary_control": "MA-4(6)",
+      "description": "SSH FIPS 140-2 cryptographic mechanisms",
+      "platform": "juniper-srx-gateway",
+      "severity": "CAT I"
+    },
+    "JUSX-DM-000133": {
+      "control_id": "JUSX-DM-000133",
+      "stig_finding": "V-223222",
+      "cci": [
+        "CCI-001619",
+        "CCI-004066"
+      ],
+      "nist_controls": [
+        "IA-5(1)(a)",
+        "IA-5(1)(h)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-5(1)(a)",
+      "description": "Password complexity - special characters",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000132": {
+      "control_id": "JUSX-DM-000132",
+      "stig_finding": "V-223221",
+      "cci": [
+        "CCI-000194",
+        "CCI-004066"
+      ],
+      "nist_controls": [
+        "IA-5(1)(a)",
+        "IA-5(1)(h)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-5(1)(a)",
+      "description": "Password complexity - numeric characters",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000131": {
+      "control_id": "JUSX-DM-000131",
+      "stig_finding": "V-223220",
+      "cci": [
+        "CCI-000193",
+        "CCI-004066"
+      ],
+      "nist_controls": [
+        "IA-5(1)(a)",
+        "IA-5(1)(h)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-5(1)(a)",
+      "description": "Password complexity - lowercase characters",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000130": {
+      "control_id": "JUSX-DM-000130",
+      "stig_finding": "V-223219",
+      "cci": [
+        "CCI-000192",
+        "CCI-004066"
+      ],
+      "nist_controls": [
+        "IA-5(1)(a)",
+        "IA-5(1)(h)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-5(1)(a)",
+      "description": "Password complexity - uppercase characters",
+      "platform": "juniper-srx-gateway"
     }
   },
   "pci_to_nist_mappings": {

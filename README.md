@@ -216,6 +216,34 @@ Required packages:
 - pytest-html
 - pytest-json-report
 
+### Configuration Data Extraction
+
+Before running tests, you need to extract configuration data from your network devices in the correct format. See the **[Data Models Guide](docs/DATA-MODELS.md)** for detailed instructions on:
+
+- API calls for each platform (IOS-XE, ASA, SRX, NX-OS)
+- NSO vs Native extraction methods
+- Data structure requirements
+- Sample configurations
+- Troubleshooting extraction issues
+
+**Quick Start**:
+```bash
+# Extract from NSO
+curl http://<NSO_IP>:8080/restconf/data/tailf-ncs:devices/device=<NAME>/config \
+  --header 'Accept: application/yang-data+json' \
+  --header 'Authorization: Basic <AUTH>' -o config.json
+
+# Extract from Native IOS-XE
+curl https://<DEVICE_IP>/restconf/data/Cisco-IOS-XE-native:native \
+  --header 'Accept: application/yang-data+json' \
+  --header 'Authorization: Basic <AUTH>' --insecure -o config.json
+
+# Extract from Native Juniper SRX
+curl http://<DEVICE_IP>:3000/rpc/get-configuration \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Basic <AUTH>' -o config.json
+```
+
 ### Running Tests
 
 Tests are executed using pytest with configuration data provided via environment variable.
@@ -649,6 +677,7 @@ This repository is maintained by Presidio Federal HAI Team for internal complian
 ## Documentation
 
 - **[README.md](README.md)**: Repository overview and usage guide (this file)
+- **[Data Models Guide](docs/DATA-MODELS.md)**: Configuration extraction methods and API calls for each platform
 - **[NIST Mappings](docs/NIST-MAPPINGS.md)**: Comprehensive NIST SP 800-53 control mappings with control descriptions
 - **[NIST Quick Reference](docs/NIST-QUICK-REFERENCE.md)**: Quick lookup tables for NIST controls and test files
 - **[NIST Mappings Data](docs/nist-800-53-mappings.json)**: Machine-readable NIST mapping data for AI agent queries

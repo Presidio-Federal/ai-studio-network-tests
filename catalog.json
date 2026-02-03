@@ -3,7 +3,7 @@
   "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
   "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2026-02-02T16:23:27Z",
+  "last_updated": "2026-02-03T18:40:00Z",
   "schema_version": "2.0",
   "metadata": {
     "purpose": "Centralized compliance testing repository for network infrastructure",
@@ -1281,6 +1281,98 @@
                               "control_family": "AC"
                             },
                             {
+                              "id": "stig-native-junsrx-gateway-v223204-dv-001",
+                              "name": "native-JUSX-DM-000087.py",
+                              "description": "The Juniper SRX Services Gateway must be configured to limit the number of configuration rollbacks that are stored.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000087",
+                              "finding_id": "V-223204",
+                              "rule_id": "SV-223204r961863_rule",
+                              "severity": "low",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "configuration-management",
+                                "rollback",
+                                "storage",
+                                "disk-space",
+                                "change-management",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.max-configuration-rollbacks",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "CM-6b"
+                              ],
+                              "cci": [
+                                "CCI-000366"
+                              ],
+                              "control_family": "CM"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v229028-dv-001",
+                              "name": "native-JUSX-DM-000106.py",
+                              "description": "The Juniper SRX Services Gateway must be configured to send critical and emergency log messages to user terminals.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000106",
+                              "finding_id": "V-229028",
+                              "rule_id": "SV-229028r961863_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "syslog",
+                                "logging",
+                                "user-terminal",
+                                "alerting",
+                                "real-time-notification",
+                                "emergency",
+                                "critical",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.syslog.user",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "CM-6b",
+                                "CM-6(1)"
+                              ],
+                              "cci": [
+                                "CCI-000366",
+                                "CCI-000372"
+                              ],
+                              "control_family": "CM"
+                            },
+                            {
                               "id": "stig-native-junsrx-gateway-v223214-dv-001",
                               "name": "native-JUSX-DM-000114.py",
                               "description": "The Juniper SRX Services Gateway must ensure TCP forwarding is disabled for SSH to prevent unauthorized access and SSH tunneling that could bypass firewall controls.",
@@ -1413,6 +1505,242 @@
                               ],
                               "cci": [
                                 "CCI-000197"
+                              ],
+                              "control_family": "IA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223227-dv-001",
+                              "name": "native-JUSX-DM-000150.py",
+                              "description": "The Juniper SRX Services Gateway must implement cryptographic mechanisms to protect the confidentiality of remote maintenance sessions using FIPS 140-2 approved algorithms.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000150",
+                              "finding_id": "V-223227",
+                              "rule_id": "SV-223227r1056177_rule",
+                              "severity": "high",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "ssh",
+                                "cryptography",
+                                "fips-140-2",
+                                "ciphers",
+                                "macs",
+                                "key-exchange",
+                                "protocol-version",
+                                "remote-maintenance",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper",
+                                "cat-i"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.services.ssh",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "MA-4(6)"
+                              ],
+                              "cci": [
+                                "CCI-003123"
+                              ],
+                              "control_family": "MA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223222-dv-001",
+                              "name": "native-JUSX-DM-000133.py",
+                              "description": "The Juniper SRX Services Gateway must enforce password complexity by requiring at least one special character for local accounts.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000133",
+                              "finding_id": "V-223222",
+                              "rule_id": "SV-223222r1015757_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "password",
+                                "complexity",
+                                "special-characters",
+                                "punctuation",
+                                "authentication",
+                                "brute-force-protection",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.login.password.minimum-punctuations",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-5(1)(a)",
+                                "IA-5(1)(h)"
+                              ],
+                              "cci": [
+                                "CCI-001619",
+                                "CCI-004066"
+                              ],
+                              "control_family": "IA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223221-dv-001",
+                              "name": "native-JUSX-DM-000132.py",
+                              "description": "The Juniper SRX Services Gateway must enforce password complexity by requiring at least one numeric character for local accounts.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000132",
+                              "finding_id": "V-223221",
+                              "rule_id": "SV-223221r1015756_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "password",
+                                "complexity",
+                                "numeric-characters",
+                                "numbers",
+                                "authentication",
+                                "brute-force-protection",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.login.password.minimum-numerics",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-5(1)(a)",
+                                "IA-5(1)(h)"
+                              ],
+                              "cci": [
+                                "CCI-000194",
+                                "CCI-004066"
+                              ],
+                              "control_family": "IA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223220-dv-001",
+                              "name": "native-JUSX-DM-000131.py",
+                              "description": "The Juniper SRX Services Gateway must enforce password complexity by requiring at least one lowercase character for local accounts.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000131",
+                              "finding_id": "V-223220",
+                              "rule_id": "SV-223220r1015755_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "password",
+                                "complexity",
+                                "lowercase-characters",
+                                "character-diversity",
+                                "authentication",
+                                "brute-force-protection",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.login.password.minimum-lower-cases",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-5(1)(a)",
+                                "IA-5(1)(h)"
+                              ],
+                              "cci": [
+                                "CCI-000193",
+                                "CCI-004066"
+                              ],
+                              "control_family": "IA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223219-dv-001",
+                              "name": "native-JUSX-DM-000130.py",
+                              "description": "The Juniper SRX Services Gateway must enforce password complexity by requiring at least one uppercase character for local accounts.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000130",
+                              "finding_id": "V-223219",
+                              "rule_id": "SV-223219r1015754_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "password",
+                                "complexity",
+                                "uppercase-characters",
+                                "character-diversity",
+                                "authentication",
+                                "brute-force-protection",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.login.password.minimum-upper-cases",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-5(1)(a)",
+                                "IA-5(1)(h)"
+                              ],
+                              "cci": [
+                                "CCI-000192",
+                                "CCI-004066"
                               ],
                               "control_family": "IA"
                             }
