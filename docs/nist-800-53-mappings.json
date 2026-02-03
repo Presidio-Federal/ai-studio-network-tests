@@ -13,7 +13,11 @@
       "controls": {
         "AC-2": {
           "control_name": "Account Management",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AC-2(4)": {
               "enhancement_name": "Automated Audit Actions",
@@ -23,7 +27,11 @@
         },
         "AC-7": {
           "control_name": "Unsuccessful Logon Attempts",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AC-7a": {
               "enhancement_name": "Enforcement of Limits",
@@ -33,12 +41,19 @@
         },
         "AC-10": {
           "control_name": "Concurrent Session Control",
-          "baseline": ["MODERATE", "HIGH"],
+          "baseline": [
+            "MODERATE",
+            "HIGH"
+          ],
           "description": "Limit the number of concurrent sessions for each system account"
         },
         "AC-17": {
           "control_name": "Remote Access",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AC-17(2)": {
               "enhancement_name": "Protection of Confidentiality/Integrity Using Encryption",
@@ -54,7 +69,11 @@
       "controls": {
         "AU-3": {
           "control_name": "Content of Audit Records",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AU-3a": {
               "enhancement_name": "Event Type",
@@ -68,7 +87,11 @@
         },
         "AU-5": {
           "control_name": "Response to Audit Processing Failures",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AU-5b": {
               "enhancement_name": "Actions Upon Failure",
@@ -82,7 +105,11 @@
         },
         "AU-9": {
           "control_name": "Protection of Audit Information",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "AU-9a": {
               "enhancement_name": "Protection from Unauthorized Access",
@@ -98,7 +125,11 @@
       "controls": {
         "CM-1": {
           "control_name": "Policy and Procedures",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "CM-1a1(a)": {
               "enhancement_name": "Policy Development",
@@ -108,7 +139,11 @@
         },
         "CM-6": {
           "control_name": "Configuration Settings",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "CM-6b": {
               "enhancement_name": "Implementation of Settings",
@@ -118,7 +153,11 @@
         },
         "CM-7": {
           "control_name": "Least Functionality",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "CM-7a": {
               "enhancement_name": "Essential Capabilities",
@@ -134,7 +173,11 @@
       "controls": {
         "IA-5": {
           "control_name": "Authenticator Management",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "IA-5(1)": {
               "enhancement_name": "Password-Based Authentication",
@@ -156,7 +199,11 @@
       "controls": {
         "SC-5": {
           "control_name": "Denial-of-Service Protection",
-          "baseline": ["LOW", "MODERATE", "HIGH"],
+          "baseline": [
+            "LOW",
+            "MODERATE",
+            "HIGH"
+          ],
           "enhancements": {
             "SC-5a": {
               "enhancement_name": "Protection Capability",
@@ -170,7 +217,10 @@
         },
         "SC-10": {
           "control_name": "Network Disconnect",
-          "baseline": ["MODERATE", "HIGH"],
+          "baseline": [
+            "MODERATE",
+            "HIGH"
+          ],
           "description": "Terminate the network connection associated with a communications session at the end of the session or after a defined time period of inactivity"
         }
       }
@@ -180,106 +230,155 @@
     "CCI-000044": {
       "cci_id": "CCI-000044",
       "definition": "Enforce the organization-defined limit of consecutive invalid logon attempts by a user during the organization-defined time period",
-      "nist_controls": ["AC-7a"],
+      "nist_controls": [
+        "AC-7a"
+      ],
       "control_family": "AC"
     },
     "CCI-000054": {
       "cci_id": "CCI-000054",
       "definition": "Limit the number of concurrent sessions for each organization-defined account and/or account type to an organization-defined number",
-      "nist_controls": ["AC-10"],
+      "nist_controls": [
+        "AC-10"
+      ],
       "control_family": "AC"
     },
     "CCI-000068": {
       "cci_id": "CCI-000068",
       "definition": "Implement cryptographic mechanisms to protect the confidentiality of remote access sessions",
-      "nist_controls": ["AC-17(2)"],
+      "nist_controls": [
+        "AC-17(2)"
+      ],
       "control_family": "AC"
     },
     "CCI-000130": {
       "cci_id": "CCI-000130",
       "definition": "Ensure that audit records containing information that establishes what type of event occurred",
-      "nist_controls": ["AU-3", "AU-3a"],
+      "nist_controls": [
+        "AU-3",
+        "AU-3a"
+      ],
       "control_family": "AU"
     },
     "CCI-000131": {
       "cci_id": "CCI-000131",
       "definition": "Ensure that audit records containing information that establishes when the event occurred",
-      "nist_controls": ["AU-3", "AU-3b"],
+      "nist_controls": [
+        "AU-3",
+        "AU-3b"
+      ],
       "control_family": "AU"
     },
     "CCI-000140": {
       "cci_id": "CCI-000140",
       "definition": "Take organization-defined actions upon audit failure include, shutting down the system, overwriting oldest audit records, and stopping the generation of audit records",
-      "nist_controls": ["AU-5b"],
+      "nist_controls": [
+        "AU-5b"
+      ],
       "control_family": "AU"
     },
     "CCI-000163": {
       "cci_id": "CCI-000163",
       "definition": "Protect audit information from unauthorized modification",
-      "nist_controls": ["AU-9", "AU-9a"],
+      "nist_controls": [
+        "AU-9",
+        "AU-9a"
+      ],
       "control_family": "AU"
     },
     "CCI-000196": {
       "cci_id": "CCI-000196",
       "definition": "For password-based authentication, store and transmit only cryptographically-protected passwords",
-      "nist_controls": ["IA-5(1)(c)"],
+      "nist_controls": [
+        "IA-5(1)(c)"
+      ],
       "control_family": "IA"
     },
     "CCI-000366": {
       "cci_id": "CCI-000366",
       "definition": "Implement the security configuration settings",
-      "nist_controls": ["CM-6b"],
+      "nist_controls": [
+        "CM-6b"
+      ],
       "control_family": "CM"
     },
     "CCI-000381": {
       "cci_id": "CCI-000381",
       "definition": "Configure the system to provide only organization-defined mission essential capabilities",
-      "nist_controls": ["CM-7", "CM-7a"],
+      "nist_controls": [
+        "CM-7",
+        "CM-7a"
+      ],
       "control_family": "CM"
     },
     "CCI-001095": {
       "cci_id": "CCI-001095",
       "definition": "Manage capacity, bandwidth, or other redundancy to limit the effects of information flooding types of denial of service attacks",
-      "nist_controls": ["SC-5(2)"],
+      "nist_controls": [
+        "SC-5(2)"
+      ],
       "control_family": "SC"
     },
     "CCI-001133": {
       "cci_id": "CCI-001133",
       "definition": "Terminate the network connection associated with a communications session at the end of the session or after an organization-defined time period of inactivity",
-      "nist_controls": ["SC-10"],
+      "nist_controls": [
+        "SC-10"
+      ],
       "control_family": "SC"
     },
     "CCI-001403": {
       "cci_id": "CCI-001403",
       "definition": "Automatically audit account modification actions",
-      "nist_controls": ["AC-2(4)"],
+      "nist_controls": [
+        "AC-2(4)"
+      ],
       "control_family": "AC"
     },
     "CCI-001821": {
       "cci_id": "CCI-001821",
       "definition": "Defines the organizational personnel or roles to whom the organization-level configuration management policy is to be disseminated",
-      "nist_controls": ["CM-1a1(a)"],
+      "nist_controls": [
+        "CM-1a1(a)"
+      ],
       "control_family": "CM"
     },
     "CCI-001858": {
       "cci_id": "CCI-001858",
       "definition": "Provide an alert in an organization-defined real-time-period to organization-defined personnel, roles, and/or locations when organization-defined audit failure events requiring real-time alerts occur",
-      "nist_controls": ["AU-5(2)"],
+      "nist_controls": [
+        "AU-5(2)"
+      ],
       "control_family": "AU"
     },
     "CCI-002385": {
       "cci_id": "CCI-002385",
       "definition": "Protect against or limit the effects of organization-defined types of denial of service events",
-      "nist_controls": ["SC-5", "SC-5a"],
+      "nist_controls": [
+        "SC-5",
+        "SC-5a"
+      ],
       "control_family": "SC"
+    },
+    "CCI-000197": {
+      "cci_id": "CCI-000197",
+      "definition": "For password-based authentication, transmit passwords only cryptographically-protected channels",
+      "nist_controls": [
+        "IA-5(1)(c)"
+      ],
+      "control_family": "IA"
     }
   },
   "test_to_nist_mappings": {
     "CISC-ND-000010": {
       "control_id": "CISC-ND-000010",
       "stig_finding": "V-215662",
-      "cci": ["CCI-000054"],
-      "nist_controls": ["AC-10"],
+      "cci": [
+        "CCI-000054"
+      ],
+      "nist_controls": [
+        "AC-10"
+      ],
       "control_family": "AC",
       "primary_control": "AC-10",
       "description": "Concurrent session limits"
@@ -287,8 +386,12 @@
     "CISC-ND-000100": {
       "control_id": "CISC-ND-000100",
       "stig_finding": "V-215664",
-      "cci": ["CCI-001403"],
-      "nist_controls": ["AC-2(4)"],
+      "cci": [
+        "CCI-001403"
+      ],
+      "nist_controls": [
+        "AC-2(4)"
+      ],
       "control_family": "AC",
       "primary_control": "AC-2(4)",
       "description": "Automated account audit"
@@ -296,8 +399,12 @@
     "CISC-ND-000150": {
       "control_id": "CISC-ND-000150",
       "stig_finding": "V-215668",
-      "cci": ["CCI-000044"],
-      "nist_controls": ["AC-7a"],
+      "cci": [
+        "CCI-000044"
+      ],
+      "nist_controls": [
+        "AC-7a"
+      ],
       "control_family": "AC",
       "primary_control": "AC-7a",
       "description": "Login attempt limits"
@@ -305,8 +412,13 @@
     "CISC-ND-000280": {
       "control_id": "CISC-ND-000280",
       "stig_finding": "V-215672",
-      "cci": ["CCI-000131"],
-      "nist_controls": ["AU-3", "AU-3b"],
+      "cci": [
+        "CCI-000131"
+      ],
+      "nist_controls": [
+        "AU-3",
+        "AU-3b"
+      ],
       "control_family": "AU",
       "primary_control": "AU-3b",
       "description": "Audit timestamp requirements"
@@ -314,8 +426,13 @@
     "CISC-ND-000380": {
       "control_id": "CISC-ND-000380",
       "stig_finding": "V-215675",
-      "cci": ["CCI-000163"],
-      "nist_controls": ["AU-9", "AU-9a"],
+      "cci": [
+        "CCI-000163"
+      ],
+      "nist_controls": [
+        "AU-9",
+        "AU-9a"
+      ],
       "control_family": "AU",
       "primary_control": "AU-9a",
       "description": "Audit information protection"
@@ -323,8 +440,12 @@
     "CISC-ND-000620": {
       "control_id": "CISC-ND-000620",
       "stig_finding": "V-215687",
-      "cci": ["CCI-000196"],
-      "nist_controls": ["IA-5(1)(c)"],
+      "cci": [
+        "CCI-000196"
+      ],
+      "nist_controls": [
+        "IA-5(1)(c)"
+      ],
       "control_family": "IA",
       "primary_control": "IA-5(1)(c)",
       "description": "Password encryption"
@@ -332,8 +453,12 @@
     "CISC-ND-000720": {
       "control_id": "CISC-ND-000720",
       "stig_finding": "V-215691",
-      "cci": ["CCI-001133"],
-      "nist_controls": ["SC-10"],
+      "cci": [
+        "CCI-001133"
+      ],
+      "nist_controls": [
+        "SC-10"
+      ],
       "control_family": "SC",
       "primary_control": "SC-10",
       "description": "Session timeout/network disconnect"
@@ -341,8 +466,12 @@
     "CISC-ND-001200": {
       "control_id": "CISC-ND-001200",
       "stig_finding": "V-220555",
-      "cci": ["CCI-000068"],
-      "nist_controls": ["AC-17(2)"],
+      "cci": [
+        "CCI-000068"
+      ],
+      "nist_controls": [
+        "AC-17(2)"
+      ],
       "control_family": "AC",
       "primary_control": "AC-17(2)",
       "description": "FIPS encryption for remote access"
@@ -350,8 +479,12 @@
     "CISC-ND-001210": {
       "control_id": "CISC-ND-001210",
       "stig_finding": "V-220556",
-      "cci": ["CCI-000068"],
-      "nist_controls": ["AC-17(2)"],
+      "cci": [
+        "CCI-000068"
+      ],
+      "nist_controls": [
+        "AC-17(2)"
+      ],
       "control_family": "AC",
       "primary_control": "AC-17(2)",
       "description": "SSH v2 with FIPS encryption"
@@ -359,8 +492,13 @@
     "CASA-FW-000040": {
       "control_id": "CASA-FW-000040",
       "stig_finding": "V-239855",
-      "cci": ["CCI-000130"],
-      "nist_controls": ["AU-3", "AU-3a"],
+      "cci": [
+        "CCI-000130"
+      ],
+      "nist_controls": [
+        "AU-3",
+        "AU-3a"
+      ],
       "control_family": "AU",
       "primary_control": "AU-3a",
       "description": "Traffic log event types"
@@ -368,8 +506,13 @@
     "CASA-FW-000050": {
       "control_id": "CASA-FW-000050",
       "stig_finding": "V-239856",
-      "cci": ["CCI-000131"],
-      "nist_controls": ["AU-3", "AU-3b"],
+      "cci": [
+        "CCI-000131"
+      ],
+      "nist_controls": [
+        "AU-3",
+        "AU-3b"
+      ],
       "control_family": "AU",
       "primary_control": "AU-3b",
       "description": "Traffic log timestamps"
@@ -377,8 +520,12 @@
     "CASA-FW-000090": {
       "control_id": "CASA-FW-000090",
       "stig_finding": "V-239857",
-      "cci": ["CCI-000140"],
-      "nist_controls": ["AU-5b"],
+      "cci": [
+        "CCI-000140"
+      ],
+      "nist_controls": [
+        "AU-5b"
+      ],
       "control_family": "AU",
       "primary_control": "AU-5b",
       "description": "Log queue for audit server failure"
@@ -386,8 +533,12 @@
     "CASA-FW-000100": {
       "control_id": "CASA-FW-000100",
       "stig_finding": "V-239858",
-      "cci": ["CCI-000366"],
-      "nist_controls": ["CM-6b"],
+      "cci": [
+        "CCI-000366"
+      ],
+      "nist_controls": [
+        "CM-6b"
+      ],
       "control_family": "CM",
       "primary_control": "CM-6b",
       "description": "TCP syslog transport"
@@ -395,8 +546,13 @@
     "CASA-FW-000130": {
       "control_id": "CASA-FW-000130",
       "stig_finding": "V-239859",
-      "cci": ["CCI-000381"],
-      "nist_controls": ["CM-7", "CM-7a"],
+      "cci": [
+        "CCI-000381"
+      ],
+      "nist_controls": [
+        "CM-7",
+        "CM-7a"
+      ],
       "control_family": "CM",
       "primary_control": "CM-7a",
       "description": "Unnecessary services disabled"
@@ -404,8 +560,14 @@
     "CASA-FW-000150": {
       "control_id": "CASA-FW-000150",
       "stig_finding": "V-239860",
-      "cci": ["CCI-001095", "CCI-004866"],
-      "nist_controls": ["SC-5(2)", "SC-5b"],
+      "cci": [
+        "CCI-001095",
+        "CCI-004866"
+      ],
+      "nist_controls": [
+        "SC-5(2)",
+        "SC-5b"
+      ],
       "control_family": "SC",
       "primary_control": "SC-5(2)",
       "description": "Basic threat detection for DoS"
@@ -413,8 +575,12 @@
     "CASA-FW-000200": {
       "control_id": "CASA-FW-000200",
       "stig_finding": "V-239862",
-      "cci": ["CCI-001821"],
-      "nist_controls": ["CM-1a1(a)"],
+      "cci": [
+        "CCI-001821"
+      ],
+      "nist_controls": [
+        "CM-1a1(a)"
+      ],
       "control_family": "CM",
       "primary_control": "CM-1a1(a)",
       "description": "Central syslog server"
@@ -422,8 +588,12 @@
     "CASA-FW-000210": {
       "control_id": "CASA-FW-000210",
       "stig_finding": "V-239863",
-      "cci": ["CCI-001858"],
-      "nist_controls": ["AU-5(2)"],
+      "cci": [
+        "CCI-001858"
+      ],
+      "nist_controls": [
+        "AU-5(2)"
+      ],
       "control_family": "AU",
       "primary_control": "AU-5(2)",
       "description": "Real-time alerts for audit failure"
@@ -431,8 +601,13 @@
     "CASA-FW-000220": {
       "control_id": "CASA-FW-000220",
       "stig_finding": "V-239864",
-      "cci": ["CCI-002385"],
-      "nist_controls": ["SC-5", "SC-5a"],
+      "cci": [
+        "CCI-002385"
+      ],
+      "nist_controls": [
+        "SC-5",
+        "SC-5a"
+      ],
       "control_family": "SC",
       "primary_control": "SC-5a",
       "description": "Scanning threat detection"
@@ -440,18 +615,83 @@
     "CASA-FW-000270": {
       "control_id": "CASA-FW-000270",
       "stig_finding": "V-239866",
-      "cci": ["CCI-000366"],
-      "nist_controls": ["CM-6b"],
+      "cci": [
+        "CCI-000366"
+      ],
+      "nist_controls": [
+        "CM-6b"
+      ],
       "control_family": "CM",
       "primary_control": "CM-6b",
       "description": "Application layer inspection"
+    },
+    "JUSX-DM-000001": {
+      "control_id": "JUSX-DM-000001",
+      "stig_finding": "V-223180",
+      "cci": [
+        "CCI-000054"
+      ],
+      "nist_controls": [
+        "AC-10"
+      ],
+      "control_family": "AC",
+      "primary_control": "AC-10",
+      "description": "SSH concurrent session limits",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000114": {
+      "control_id": "JUSX-DM-000114",
+      "stig_finding": "V-223214",
+      "cci": [
+        "CCI-000382"
+      ],
+      "nist_controls": [
+        "CM-7",
+        "CM-7b"
+      ],
+      "control_family": "CM",
+      "primary_control": "CM-7b",
+      "description": "SSH TCP forwarding disabled (tunneling prevention)",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000124": {
+      "control_id": "JUSX-DM-000124",
+      "stig_finding": "V-223216",
+      "cci": [
+        "CCI-001941"
+      ],
+      "nist_controls": [
+        "IA-2(8)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-2(8)",
+      "description": "Replay-resistant authentication (SSH MAC algorithms)",
+      "platform": "juniper-srx-gateway"
+    },
+    "JUSX-DM-000136": {
+      "control_id": "JUSX-DM-000136",
+      "stig_finding": "V-223223",
+      "cci": [
+        "CCI-000197"
+      ],
+      "nist_controls": [
+        "IA-5(1)(c)"
+      ],
+      "control_family": "IA",
+      "primary_control": "IA-5(1)(c)",
+      "description": "SHA-256 or higher password format",
+      "platform": "juniper-srx-gateway",
+      "severity": "CAT I"
     }
   },
   "pci_to_nist_mappings": {
     "PCI-DSS-2.2.2": {
       "pci_requirement": "2.2.2",
       "description": "Vendor default accounts and passwords managed",
-      "nist_controls": ["IA-5(1)(c)", "CM-6b"],
+      "nist_controls": [
+        "IA-5(1)(c)",
+        "CM-6b"
+      ],
       "control_family": "IA",
       "primary_control": "IA-5(1)(c)",
       "relationship": "PCI-DSS 2.2.2 aligns with NIST IA-5(1)(c) for password protection"
@@ -459,7 +699,9 @@
     "PCI-DSS-8.3.6": {
       "pci_requirement": "8.3.6",
       "description": "Account lockout for at least 30 minutes",
-      "nist_controls": ["AC-7a"],
+      "nist_controls": [
+        "AC-7a"
+      ],
       "control_family": "AC",
       "primary_control": "AC-7a",
       "relationship": "PCI-DSS 8.3.6 is more stringent than NIST AC-7a (30 min vs organization-defined)"
@@ -467,7 +709,9 @@
     "PCI-DSS-10.3.4": {
       "pci_requirement": "10.3.4",
       "description": "Date and time in audit logs",
-      "nist_controls": ["AU-3b"],
+      "nist_controls": [
+        "AU-3b"
+      ],
       "control_family": "AU",
       "primary_control": "AU-3b",
       "relationship": "PCI-DSS 10.3.4 directly maps to NIST AU-3b"

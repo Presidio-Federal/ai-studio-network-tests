@@ -3,7 +3,7 @@
   "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
   "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2026-01-30T09:39:56Z",
+  "last_updated": "2026-02-02T16:23:27Z",
   "schema_version": "2.0",
   "metadata": {
     "purpose": "Centralized compliance testing repository for network infrastructure",
@@ -1215,6 +1215,208 @@
                           "framework": "batfish",
                           "path": "stig/native/cisco-ios-xe-router/traffic",
                           "tests": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "juniper": {
+              "platforms": {
+                "srx": {
+                  "device_types": {
+                    "gateway": {
+                      "stig_version": "3",
+                      "stig_release": "3",
+                      "stig_date": "2025-01-30",
+                      "full_name": "Juniper SRX Services Gateway STIG (Native)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest",
+                          "framework": "pytest",
+                          "path": "stig/native/juniper-srx-gateway",
+                          "tests": [
+                            {
+                              "id": "stig-native-junsrx-gateway-v223180-dv-001",
+                              "name": "native-JUSX-DM-000001.py",
+                              "description": "The Juniper SRX Services Gateway must limit the number of concurrent sessions to a maximum of 10 or less for remote access using SSH.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000001",
+                              "finding_id": "V-223180",
+                              "rule_id": "SV-223180r960735_rule",
+                              "severity": "low",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "ssh",
+                                "connection-limit",
+                                "remote-access",
+                                "concurrent-sessions",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.services.ssh.connection-limit",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "AC-10"
+                              ],
+                              "cci": [
+                                "CCI-000054"
+                              ],
+                              "control_family": "AC"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223214-dv-001",
+                              "name": "native-JUSX-DM-000114.py",
+                              "description": "The Juniper SRX Services Gateway must ensure TCP forwarding is disabled for SSH to prevent unauthorized access and SSH tunneling that could bypass firewall controls.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000114",
+                              "finding_id": "V-223214",
+                              "rule_id": "SV-223214r1043177_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "ssh",
+                                "tcp-forwarding",
+                                "tunneling",
+                                "port-forwarding",
+                                "security-bypass",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.services.ssh.no-tcp-forwarding",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "CM-7",
+                                "CM-7b"
+                              ],
+                              "cci": [
+                                "CCI-000382"
+                              ],
+                              "control_family": "CM"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223216-dv-001",
+                              "name": "native-JUSX-DM-000124.py",
+                              "description": "The Juniper SRX Services Gateway must implement replay-resistant authentication mechanisms by configuring SSH with approved HMAC algorithms to prevent replay attacks.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000124",
+                              "finding_id": "V-223216",
+                              "rule_id": "SV-223216r960993_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "ssh",
+                                "mac",
+                                "hmac",
+                                "replay-attack",
+                                "authentication",
+                                "cryptography",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.services.ssh.macs",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-2(8)"
+                              ],
+                              "cci": [
+                                "CCI-001941"
+                              ],
+                              "control_family": "IA"
+                            },
+                            {
+                              "id": "stig-native-junsrx-gateway-v223223-dv-001",
+                              "name": "native-JUSX-DM-000136.py",
+                              "description": "The Juniper SRX Services Gateway must use SHA-256 or later protocol for password authentication for local accounts to protect passwords from compromise.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "juniper",
+                              "platform": "srx",
+                              "device_type": "gateway",
+                              "control_id": "JUSX-DM-000136",
+                              "finding_id": "V-223223",
+                              "rule_id": "SV-223223r1056174_rule",
+                              "severity": "high",
+                              "stig_date": "2025-01-30",
+                              "tags": [
+                                "password",
+                                "sha256",
+                                "sha512",
+                                "cryptography",
+                                "hashing",
+                                "authentication",
+                                "stig",
+                                "gateway",
+                                "native",
+                                "juniper",
+                                "cat-i"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_juniper_srx.json",
+                              "data_path": "configuration.system.login.password.format",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false,
+                              "nist_controls": [
+                                "IA-5(1)(c)"
+                              ],
+                              "cci": [
+                                "CCI-000197"
+                              ],
+                              "control_family": "IA"
+                            }
+                          ]
                         }
                       }
                     }
