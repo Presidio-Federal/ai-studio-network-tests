@@ -85,7 +85,6 @@ report.json
 
 # NSO specific
 ncs-cdb/
-state/
 ncs-java-vm*/
 ncs-python-vm*/
 

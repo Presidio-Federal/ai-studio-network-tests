@@ -2671,10 +2671,96 @@
               ]
             },
             "state_checks": {
-              "description": "Generic operational state validation",
+              "description": "Generic operational state validation using pyATS/Genie",
               "framework": "pyats",
               "path": "general/state",
-              "tests": []
+              "tests": [
+                {
+                  "id": "general-state-routing-bgp-001",
+                  "name": "state_bgp_neighbors.py",
+                  "category": "routing",
+                  "description": "Validate BGP neighbor relationships and operational state. Connects to device, learns BGP neighbors, and validates they are in established state.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-ROUTING-BGP-001",
+                  "severity": "medium",
+                  "tags": [
+                    "bgp",
+                    "routing",
+                    "state",
+                    "pyats",
+                    "multi-vendor"
+                  ],
+                  "estimated_runtime": "medium",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "nxos",
+                    "junos",
+                    "iosxr"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.expected_neighbors",
+                      "test_config.min_neighbors"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-connectivity-ping-001",
+                  "name": "state_connectivity_ping.py",
+                  "category": "connectivity",
+                  "description": "Validate network connectivity by pinging a target IP from the device. Verifies 100% packet success rate.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-CONNECTIVITY-001",
+                  "severity": "high",
+                  "tags": [
+                    "ping",
+                    "connectivity",
+                    "state",
+                    "pyats",
+                    "multi-vendor"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "nxos",
+                    "junos",
+                    "iosxr"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params",
+                      "test_config.target_ip"
+                    ],
+                    "optional": [
+                      "test_config.count",
+                      "test_config.timeout"
+                    ]
+                  }
+                }
+              ]
             },
             "traffic_tests": {
               "description": "Generic traffic flow validation",
