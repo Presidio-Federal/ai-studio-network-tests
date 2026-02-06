@@ -335,5 +335,5 @@ To integrate with your `catalog.json`, add:
 ---
 
 **Created:** February 3, 2026  
-**Author:** HAI Compliance Testing Team  
+**Author:** AI Studio Compliance Testing Team  
 **Status:** Phase 1 Complete - 3 of 12 planned tests implemented

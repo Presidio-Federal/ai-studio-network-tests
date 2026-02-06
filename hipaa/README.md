@@ -214,10 +214,10 @@ When adding new HIPAA tests:
 
 ## License
 
-Internal use - HAI Compliance Testing Team
+Internal use - AI Studio Compliance Testing Team
 
 ---
 
 **Last Updated:** February 3, 2026  
 **Version:** 1.0  
-**Maintainer:** HAI Compliance Testing Team
+**Maintainer:** AI Studio Compliance Testing Team

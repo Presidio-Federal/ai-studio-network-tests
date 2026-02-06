@@ -1,12 +1,100 @@
-# HAI Network Compliance Testing Repository
+# AI Studio Network Compliance Testing Repository
 
 ## Overview
 
-The HAI Network Compliance Testing Repository is a centralized, catalog-driven compliance validation system designed for network infrastructure security testing across multiple frameworks, vendors, and platforms. This repository enables automated compliance checking through an AI-agent accessible catalog architecture that supports multi-vendor environments and various data extraction methods.
+This repository contains multivendor compliance checks that can be presented to an AI agent and executed using MCP (Model Context Protocol). Network testing is made as easy as possible - your agent can query the up-to-date test catalog, select tests, and run them against your data or live network. The agent will then report whether you are compliant with your selected framework.
 
-## Key Features
+## Table of Contents
 
-### Multi-Framework Compliance Support
+### Test Types
+- [Data Validation](#data-validation)
+- [Predictive Validation](#predictive-validation) *(Coming Soon)*
+- [State Checks](#state-checks)
+
+### Getting Started
+- [Data Validation - Getting The Structured Data](#getting-the-structured-data)
+- [Data Validation - Running The Checks](#running-data-validation-checks)
+- [State Checks - Building A Testbed](#building-a-testbed)
+- [State Checks - Running State Checks](#running-state-checks)
+- [State Checks - Adding Tests](#adding-state-check-tests)
+
+### Compliance Frameworks
+- [HIPAA](#hipaa-compliance)
+- [PCI-DSS](#pci-dss-compliance)
+- [STIG](#stig-compliance)
+- [Purdue Model](#purdue-model)
+- [NIST Mapping](#nist-mappings)
+
+### Documentation
+- [Test Development Guide](docs/TEST_DEVELOPMENT_GUIDE.md)
+- [Data Models Guide](docs/DATA-MODELS.md)
+- [NIST Mappings](docs/NIST-MAPPINGS.md)
+- [NIST Quick Reference](docs/NIST-QUICK-REFERENCE.md)
+- [HIPAA Implementation](docs/HIPAA-TESTS-COMPLETE.md)
+- [Compliance Framework Expansion](docs/COMPLIANCE-FRAMEWORK-EXPANSION-REPORT.md)
+
+---
+
+## Test Types
+
+AI Studio provides three types of network testing to validate compliance:
+
+### Data Validation
+
+**Data validation tests** check network device configurations against compliance requirements using structured configuration data. These tests:
+
+- Parse configuration data (JSON/YAML) extracted from network devices
+- Validate settings against specific compliance framework requirements
+- Provide immediate pass/fail results with detailed remediation guidance
+- Run quickly without requiring live device access
+- Support multiple extraction methods (NSO, Native API, CLI parsing)
+
+**How it works**: Configuration data is extracted from devices using NSO RESTCONF, native device APIs (RESTCONF, NX-API, Juniper REST), or CLI parsing tools. The structured data is then validated against compliance rules defined in pytest-based tests. Each test checks specific configuration elements (e.g., password encryption, SSH algorithms, logging configuration) and reports compliance status.
+
+**Tools**: pytest, pydantic, jsonschema, YAML/JSON parsers
+
+**Frameworks**: pytest, pydantic, jsonschema  
+**Input**: Structured configuration data (JSON/YAML)  
+**Output**: pytest JUnit XML reports with detailed findings
+
+### Predictive Validation *(Coming Soon)*
+
+**Predictive validation tests** allow your AI agent to use Batfish to conduct pre-built tests against network snapshots for various compliance checks before deployment. These tests:
+
+- Analyze network topology and routing using Batfish
+- Validate security policy enforcement across the network
+- Simulate traffic flows to identify potential issues
+- Detect configuration errors before deployment
+- Verify reachability and access control policies
+
+**How it works**: Network device configurations are loaded into Batfish, which builds a complete model of the network including routing tables, ACLs, and traffic flows. Tests query this model to validate compliance requirements like proper segmentation, traffic filtering, and security policy enforcement.
+
+**Tools**: Batfish, pybatfish  
+**Frameworks**: Batfish, pybatfish  
+**Input**: Configuration files and network topology  
+**Output**: pytest JUnit XML reports with policy violations
+
+### State Checks
+
+**State checks** validate operational state and runtime behavior of live network devices using pyATS/Genie. These tests:
+
+- Connect directly to live network devices via SSH
+- Execute operational commands (show commands) on devices
+- Parse command output using Genie parsers for structured data
+- Validate runtime state (BGP neighbors, interface status, routing tables)
+- Verify control plane and data plane functionality
+- Check operational aspects that cannot be validated from configuration alone
+
+**How it works**: Tests use pyATS to establish SSH connections to devices, execute show commands, and parse the output using Genie's vendor-specific parsers. The parsed data is validated against operational requirements (e.g., BGP neighbors established, NTP synchronized, interfaces up).
+
+**Tools**: pyATS, Genie, Netmiko  
+**Frameworks**: pyATS, Genie, NAPALM  
+**Input**: Live device access via SSH (testbed with credentials)  
+**Output**: pytest JUnit XML reports with operational state validation
+
+---
+
+## Multi-Framework Compliance Support
 
 The repository supports multiple compliance frameworks, each with framework-specific tests and requirements:
 
@@ -19,7 +107,7 @@ The repository supports multiple compliance frameworks, each with framework-spec
 
 **All tests map to NIST SP 800-53 Rev 5 controls**, enabling unified compliance reporting across frameworks. See [NIST Mappings Documentation](docs/NIST-MAPPINGS.md) for complete control mappings.
 
-### Multi-Vendor and Multi-Platform Support
+## Multi-Vendor and Multi-Platform Support
 
 Tests are organized by vendor, platform, and device role:
 
@@ -29,15 +117,236 @@ Tests are organized by vendor, platform, and device role:
 - **Juniper Junos**: Firewalls and routers
 - **Multi-vendor**: Generic baseline tests applicable across platforms
 
-### Multiple Data Extraction Methods
+---
 
-The repository supports different methods of extracting configuration data from network devices:
+## Data Validation
 
-- **NSO (Network Services Orchestrator)**: Tests consume YANG-modeled JSON/YAML data from Cisco NSO
-- **Native CLI/API**: Tests parse native device configurations or API responses
-- **API-Specific**: Tests for vendor-specific APIs (DNAC, SD-WAN vManage, etc.)
+Data validation tests check device configurations against compliance requirements without requiring live device access.
 
-This architecture allows the same compliance requirement to be tested against different data sources, providing flexibility for organizations with varied tooling.
+### Getting The Structured Data
+
+Before running data validation tests, you must extract configuration data from your network devices in the correct format. The repository supports two extraction methods:
+
+#### NSO (Network Services Orchestrator) Extraction
+
+NSO provides YANG-modeled configuration data with consistent structure across vendors.
+
+**Extract configuration from NSO:**
+
+```bash
+curl --location "http://<NSO_IP>:8080/restconf/data/tailf-ncs:devices/device=<DEVICE_NAME>/config" \
+  --header 'Accept: application/yang-data+json' \
+  --header 'Authorization: Basic <BASE64_CREDENTIALS>' \
+  --output config.json
+```
+
+**Example:**
+```bash
+NSO_IP="10.0.0.1"
+DEVICE_NAME="ROUTER-01"
+AUTH=$(echo -n "admin:password" | base64)
+
+curl "http://${NSO_IP}:8080/restconf/data/tailf-ncs:devices/device=${DEVICE_NAME}/config" \
+  --header 'Accept: application/yang-data+json' \
+  --header "Authorization: Basic ${AUTH}" \
+  -o test-data/nso/cisco-ios-xe-router/${DEVICE_NAME}-config.json
+```
+
+#### Native Device Extraction
+
+Extract directly from devices using vendor-specific APIs.
+
+**Cisco IOS-XE (RESTCONF):**
+```bash
+curl "https://<DEVICE_IP>/restconf/data/Cisco-IOS-XE-native:native" \
+  --header 'Accept: application/yang-data+json' \
+  --header 'Authorization: Basic <BASE64_CREDENTIALS>' \
+  --insecure -o config.json
+```
+
+**Juniper SRX (REST API):**
+```bash
+curl "http://<DEVICE_IP>:3000/rpc/get-configuration" \
+  --header 'Accept: application/json' \
+  --header 'Authorization: Basic <BASE64_CREDENTIALS>' \
+  -o config.json
+```
+
+**Cisco NX-OS (NX-API):**
+```bash
+curl "https://<DEVICE_IP>/ins" \
+  --header 'Content-Type: application/json' \
+  --data '{"ins_api": {"version": "1.0", "type": "cli_show", "chunk": "0", "sid": "1", "input": "show running-config", "output_format": "json"}}' \
+  -o config.json
+```
+
+For complete extraction instructions, API endpoints, and data model details, see the **[Data Models Guide](docs/DATA-MODELS.md)**.
+
+### Running Data Validation Checks
+
+Tests are executed using pytest with configuration data provided via environment variable.
+
+#### Basic Test Execution
+
+Run a single test:
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/sample-cat8000v.yaml" \
+  pytest stig/nso/cisco-ios-xe/router/nso-CISC-ND-000620.py -v
+```
+
+Run all tests in a directory:
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-asa-firewall/sample-asa.json" \
+  pytest stig/nso/cisco-asa-firewall/*.py -v
+```
+
+#### Framework-Specific Testing
+
+Run all STIG tests for IOS-XE routers (NSO):
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/sample-cat8000v.yaml" \
+  pytest stig/nso/cisco-ios-xe/router/*.py -v
+```
+
+Run all PCI-DSS tests for IOS-XE routers (Native):
+```bash
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/sample_cat8000v_native.json" \
+  pytest pci-dss/native/cisco-ios-xe-router/*.py -v
+```
+
+Run all HIPAA tests for IOS-XE routers:
+```bash
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/sample_cat8000v_native.json" \
+  pytest hipaa/native/cisco-ios-xe-router/*.py -v
+```
+
+#### Generating Reports
+
+HTML Report:
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-asa-firewall/sample-asa.json" \
+  pytest stig/nso/cisco-asa-firewall/*.py --html=report.html --self-contained-html
+```
+
+JSON Report:
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/sample-cat8000v.yaml" \
+  pytest stig/nso/cisco-ios-xe/router/*.py --json-report --json-report-file=report.json
+```
+
+---
+
+## Predictive Validation
+
+*(Coming Soon)*
+
+Batfish-based predictive validation will enable pre-deployment testing of network configurations:
+
+- Network topology analysis
+- Security policy validation
+- Reachability testing
+- Traffic flow simulation
+- Configuration error detection
+
+---
+
+## State Checks
+
+State checks validate the operational state of live network devices using pyATS and Genie.
+
+### Building A Testbed
+
+State checks require a testbed definition that describes how to connect to your devices. See the **[Test Development Guide](docs/TEST_DEVELOPMENT_GUIDE.md)** for complete testbed configuration.
+
+**Example testbed structure:**
+```python
+{
+    "device_name": "ROUTER-01",      # Hostname of device
+    "host": "192.168.1.1",           # IP address
+    "username": "admin",             # SSH username
+    "password": "password",          # SSH password
+    "device_type": "cisco_xe",       # Device type
+    "port": 22                       # SSH port
+}
+```
+
+### Running State Checks
+
+State checks connect to live devices and validate operational state.
+
+**Run BGP neighbor state check:**
+```bash
+pytest general/state/routing/state_bgp_neighbors.py -v
+```
+
+**Run gateway reachability check:**
+```bash
+pytest general/state/connectivity/state_gateway_reachability.py -v
+```
+
+**Run logging configuration check:**
+```bash
+pytest general/state/monitoring/state_logging.py -v
+```
+
+State checks use pytest fixtures to pass device connection parameters and test-specific configuration.
+
+### Adding State Check Tests
+
+To create new state check tests, follow the patterns in the **[Test Development Guide](docs/TEST_DEVELOPMENT_GUIDE.md)**:
+
+1. **Use standardized fixtures**: Accept `device_params` and `test_config` fixtures
+2. **Connect with pyATS**: Use pyATS/Genie for structured data parsing
+3. **Print validation details**: Use `print()` statements for agent visibility
+4. **Register in catalog**: Add test metadata to `catalog.json`
+
+**Example test structure:**
+```python
+from genie.testbed import load
+from pyats.topology import loader
+
+def test_bgp_neighbors(device_params, test_config):
+    """Validate BGP neighbors are established."""
+    
+    # Build testbed from device_params
+    testbed_dict = {
+        "devices": {
+            device_params["device_name"]: {
+                "type": "router",
+                "os": "iosxe",
+                "credentials": {"default": {
+                    "username": device_params["username"],
+                    "password": device_params["password"]
+                }},
+                "connections": {
+                    "cli": {
+                        "protocol": "ssh",
+                        "ip": device_params["host"]
+                    }
+                }
+            }
+        }
+    }
+    
+    # Connect and validate
+    testbed = loader.load(testbed_dict)
+    device = testbed.devices[device_params["device_name"]]
+    device.connect()
+    
+    try:
+        bgp_data = device.learn("bgp")
+        # Validation logic here
+        print(f"\n✓ All BGP neighbors are established")
+    finally:
+        device.disconnect()
+```
+
+For complete examples and best practices, see:
+- **[Test Development Guide](docs/TEST_DEVELOPMENT_GUIDE.md)**: Complete test writing instructions
+- **Example tests**: `general/state/connectivity/state_gateway_reachability.py`
+- **Example tests**: `general/state/routing/state_bgp_neighbors.py`
+
+---
 
 ## Repository Architecture
 
@@ -53,31 +362,50 @@ The `catalog.json` file serves as the central registry for all compliance tests.
 ### Directory Structure
 
 ```
-hai-network-tests/
+ai-studio-network-tests/
 ├── catalog.json                     # Central test registry
 ├── requirements.txt                 # Python dependencies
 │
 ├── stig/                            # STIG compliance tests
 │   ├── nso/                         # NSO extraction method
 │   │   ├── cisco-ios-xe/
-│   │   │   ├── router/              # 7 router tests
-│   │   │   └── switch/              # 2 switch tests
-│   │   └── cisco-asa-firewall/      # 10 firewall tests
+│   │   │   ├── router/              # Router tests
+│   │   │   └── switch/              # Switch tests
+│   │   └── cisco-asa-firewall/      # Firewall tests
 │   └── native/                      # Native extraction method
-│       └── cisco-ios-xe-router/     # 7 router tests
+│       ├── cisco-ios-xe-router/     # Router tests
+│       └── juniper-srx-gateway/     # SRX gateway tests
 │
 ├── pci-dss/                         # PCI-DSS compliance tests
 │   ├── nso/
-│   │   └── cisco-ios-xe-router/     # 3 PCI-DSS tests
+│   │   └── cisco-ios-xe-router/
 │   └── native/
-│       └── cisco-ios-xe-router/     # 3 PCI-DSS tests
+│       └── cisco-ios-xe-router/
+│
+├── hipaa/                           # HIPAA compliance tests
+│   ├── nso/
+│   │   └── cisco-ios-xe-router/
+│   └── native/
+│       └── cisco-ios-xe-router/
 │
 ├── csfc/                            # CSfC architecture tests
 │   ├── eg-dr/                       # Enclave Gateway Data in Transit
 │   └── eg-fw/                       # Enclave Gateway Firewall
 │
 ├── purdue/                          # Purdue Model ICS/OT tests
-│   └── catalog/                     # Level-specific control catalogs
+│   └── level-3.5/                   # Level 3.5 tests
+│
+├── general/                         # General state checks
+│   └── state/                       # State validation tests
+│       ├── connectivity/            # Connectivity tests
+│       ├── routing/                 # Routing tests
+│       └── monitoring/              # Monitoring tests
+│
+├── docs/                            # Documentation
+│   ├── DATA-MODELS.md
+│   ├── TEST_DEVELOPMENT_GUIDE.md
+│   ├── NIST-MAPPINGS.md
+│   └── ...
 │
 └── test-data/                       # Sample configurations (gitignored)
     ├── nso/                         # NSO format samples
@@ -105,103 +433,134 @@ This organization enables precise test discovery based on:
 - What role the device serves (router, switch, firewall)
 - What type of test is needed (data validation, state checks, traffic analysis)
 
-## Test Types
+## Available Compliance Frameworks
 
-### Data Validation Tests
+### HIPAA Compliance
 
-Configuration compliance validation using pytest and JSON schema validation. These tests:
-- Parse structured configuration data (JSON/YAML)
-- Validate against compliance requirements
-- Provide detailed pass/fail results with remediation guidance
-- Run quickly without requiring live device access
+**Health Insurance Portability and Accountability Act** - Security and privacy requirements for healthcare data.
 
-**Frameworks**: pytest, pydantic, jsonschema  
-**Input**: Structured configuration data  
-**Output**: pytest JUnit XML reports
+The HIPAA test suite validates technical safeguards required by 45 CFR § 164.312:
 
-### State Checks
+- **Access Control**: Unique user identification, automatic logoff, emergency access procedures
+- **Audit Controls**: Comprehensive logging, log retention, centralized logging
+- **Integrity**: Configuration change control, data integrity validation
+- **Authentication**: Multi-factor authentication, password complexity, account lockout
+- **Transmission Security**: Encryption in transit, strong cryptography, secure protocols
 
-Operational state validation using pyATS/Genie parsers. These tests:
-- Execute operational commands on live devices
-- Parse and validate operational state
-- Check runtime behavior and status
-- Verify control plane and data plane functionality
+**Current Coverage**: 3 tests for Cisco IOS-XE (expandable to 17 tests)  
+**Severity Levels**: High, Medium  
+**NIST Mapping**: AC-2, AC-7, AC-11, AU-2, IA-2, IA-5, SC-8, SC-13
 
-**Frameworks**: pyATS, Genie, NAPALM  
-**Input**: Live device access or operational state dumps  
-**Output**: pytest JUnit XML reports
+**Documentation**: [HIPAA Implementation Guide](docs/HIPAA-TESTS-COMPLETE.md)
 
-### Traffic Tests
+**Example Test**:
+```bash
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/config.json" \
+  pytest hipaa/native/cisco-ios-xe-router/native-HIPAA-PA-004.py -v
+```
 
-Traffic flow analysis and security policy validation. These tests:
-- Analyze network topology and routing
-- Validate security policy enforcement
-- Simulate traffic flows
-- Identify potential security gaps
+### PCI-DSS Compliance
 
-**Frameworks**: Batfish, pybatfish  
-**Input**: Configuration files and network topology  
-**Output**: pytest JUnit XML reports
+**Payment Card Industry Data Security Standard v4.0** - Requirements for protecting cardholder data.
 
-## Current Test Inventory
+The PCI-DSS test suite validates network security controls for payment card processing environments:
 
-### STIG Compliance Tests
+- **Requirement 1**: Network security controls (firewall rules, change control)
+- **Requirement 2**: Secure configurations (vendor defaults, strong crypto, disabled services)
+- **Requirement 8**: User identification and authentication (unique IDs, MFA, password policies)
+- **Requirement 10**: Logging and monitoring (comprehensive logs, log protection, log review)
 
-#### Cisco ASA Firewall (NSO) - 10 Tests
-- CASA-FW-000040: Traffic log event types
-- CASA-FW-000050: Logging timestamps
-- CASA-FW-000090: Buffered logging and queue
-- CASA-FW-000100: TCP syslog transport
-- CASA-FW-000130: Unnecessary services disabled
-- CASA-FW-000150: Basic threat detection
-- CASA-FW-000200: Central syslog server
-- CASA-FW-000210: Email alerts for syslog failure
-- CASA-FW-000220: Scanning threat detection (CAT I High)
-- CASA-FW-000270: Application layer inspection
+**Current Coverage**: 6 tests for Cisco IOS-XE (expandable to 44 tests)  
+**Severity Levels**: Critical, High, Medium  
+**NIST Mapping**: AC-2, AC-3, AU-2, AU-3, IA-2, IA-5, SC-8, SC-13
 
-#### Cisco IOS-XE Router (NSO) - 7 Tests
-- CISC-ND-000010: Concurrent session limits
-- CISC-ND-000100: Account modification auditing
-- CISC-ND-000150: Login attempt limits
-- CISC-ND-000280: Log timestamps
-- CISC-ND-000620: Password encryption (High)
-- CISC-ND-000720: Connection timeout
-- CISC-ND-001210: SSH v2 with FIPS encryption (High)
+**Example Test**:
+```bash
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/config.json" \
+  pytest pci-dss/native/cisco-ios-xe-router/native_pci_8_3_6_account_lockout.py -v
+```
 
-#### Cisco IOS-XE Router (Native) - 7 Tests
-- Identical STIG requirements as NSO, but tests native CLI/API data formats
+### STIG Compliance
 
-#### Cisco IOS-XE Switch (NSO) - 2 Tests
-- CISC-ND-001200: FIPS-validated HMAC for remote maintenance
-- CISC-ND-001210: SSH v2 with FIPS encryption
+**Security Technical Implementation Guides** - Department of Defense security configuration standards from DISA.
 
-### PCI-DSS Compliance Tests
+The STIG test suite validates DoD security requirements for network devices:
 
-#### Cisco IOS-XE Router (NSO + Native) - 6 Tests
-- PCI-DSS 2.2.2: Password encryption and vendor defaults (High)
-- PCI-DSS 8.3.6: Account lockout duration (30 minutes minimum) (High)
-- PCI-DSS 10.3.4: Audit log timestamps (High)
+#### Cisco IOS-XE (26 tests)
+- Session management and access control
+- Account management and auditing  
+- Password and authentication security
+- Remote access security (SSH, HTTPS)
+- Logging and audit requirements
+- Service hardening
 
-Each requirement includes both NSO and Native extraction method versions.
+#### Cisco ASA Firewall (10 tests)
+- Logging and audit configuration
+- Syslog transport and redundancy
+- Email alerting for failures
+- Threat detection (basic and scanning)
+- Application layer inspection
 
-### CSfC Architecture Tests
+#### Juniper SRX (11 tests)
+- Password policy enforcement
+- SSH configuration and hardening
+- Session timeout controls
+- Authentication mechanisms
 
-#### Juniper Junos Firewall - 14 Tests
-- Enclave Gateway Data in Transit (EG-DR): 1 test
-- Enclave Gateway Firewall (EG-FW): 13 tests
+**Current Coverage**: 47 tests across multiple platforms  
+**Severity Levels**: CAT I (High), CAT II (Medium), CAT III (Low)  
+**NIST Mapping**: All tests map to NIST SP 800-53 Rev 5 controls
 
-### General Baseline Tests - 2 Tests
-- NTP server configuration and synchronization
-- Clear text password detection
+**Example Test**:
+```bash
+TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/config.yaml" \
+  pytest stig/nso/cisco-ios-xe/router/nso-CISC-ND-001210.py -v
+```
 
-### Purdue Model Tests - 1 Test
-- Level 3.5 DMZ boundary protection
+### Purdue Model
 
-**Total Test Count: 49 tests** across multiple frameworks and extraction methods
+**Industrial Control System (ICS/OT) Network Segmentation** - Network segmentation standards for operational technology.
 
-## Usage
+The Purdue Model test suite validates network segmentation for ICS/OT environments:
 
-### Prerequisites
+- **Level 3.5 (DMZ)**: Boundary protection between IT and OT networks
+- **Level 4 (Enterprise)**: Business network security controls
+
+**Current Coverage**: 1 test for Level 3.5 DMZ boundary protection  
+**Use Case**: Manufacturing, utilities, critical infrastructure  
+**NIST Mapping**: SC-7 (Boundary Protection)
+
+**Example Test**:
+```bash
+pytest purdue/level-3.5/tests/L3.5-SC7-001_test.py -v
+```
+
+### NIST Mappings
+
+**All tests map to NIST SP 800-53 Rev 5 controls**, enabling unified compliance reporting across frameworks.
+
+The NIST mapping provides:
+- Cross-framework control alignment
+- Unified compliance reporting
+- Control family grouping (AC, AU, IA, SC, etc.)
+- Control descriptions and requirements
+
+**Available Documentation**:
+- **[NIST Mappings](docs/NIST-MAPPINGS.md)**: Complete control mappings with descriptions
+- **[NIST Quick Reference](docs/NIST-QUICK-REFERENCE.md)**: Quick lookup tables
+- **[nist-800-53-mappings.json](docs/nist-800-53-mappings.json)**: Machine-readable mapping data
+
+**Example**: A single password encryption test validates:
+- STIG: CISC-ND-000620
+- PCI-DSS: 2.2.2
+- HIPAA: HIPAA-PA-002
+- NIST: IA-5(1)(c)
+
+---
+
+---
+
+## Prerequisites
 
 Python 3.8 or higher with the following dependencies:
 
@@ -306,193 +665,42 @@ pip install -r requirements.txt
 
 The catalog is designed for programmatic access by AI agents. Agents can query tests based on:
 
-- **Framework**: `framework='STIG'` or `framework='PCI-DSS'`
+- **Framework**: `framework='STIG'` or `framework='PCI-DSS'` or `framework='HIPAA'`
 - **Extraction Method**: `extraction_method='nso'` or `extraction_method='native'`
-- **Vendor**: `vendor='cisco'`
-- **Platform**: `platform='ios-xe'` or `platform='asa'`
+- **Vendor**: `vendor='cisco'` or `vendor='juniper'`
+- **Platform**: `platform='ios-xe'` or `platform='asa'` or `platform='junos'`
 - **Device Type**: `device_type='router'` or `device_type='firewall'`
-- **Test Type**: `test_type='data_validation'`
-- **Severity**: `severity='high'`
+- **Test Type**: `test_type='data_validation'` or `test_type='state_checks'`
+- **Severity**: `severity='high'` or `severity='critical'`
 - **Control ID**: `control_id='CISC-ND-001210'`
 - **Tags**: `tags CONTAINS 'ssh'` or `tags CONTAINS 'encryption'`
 
 ### Example AI Agent Workflow
 
-1. **Extract Configuration**: Agent retrieves configuration from NSO API
+1. **Extract Configuration**: Agent retrieves configuration from NSO API or native device API
 2. **Identify Attributes**: Determines vendor=cisco, platform=ios-xe, device_type=router
 3. **Query Catalog**: 
    ```
    framework='STIG' AND extraction_method='nso' AND vendor='cisco' 
    AND platform='ios-xe' AND device_type='router'
    ```
-4. **Download Tests**: Agent retrieves relevant test files
+4. **Download Tests**: Agent retrieves relevant test files from repository
 5. **Execute Tests**: Runs pytest with extracted configuration data
 6. **Report Results**: Generates compliance report with pass/fail status and remediation guidance
 
-### Catalog Structure Example
-
-```json
-{
-  "compliance_frameworks": {
-    "STIG": {
-      "extraction_methods": {
-        "nso": {
-          "vendors": {
-            "cisco": {
-              "platforms": {
-                "ios-xe": {
-                  "device_types": {
-                    "router": {
-                      "test_types": {
-                        "data_validation": {
-                          "tests": [...]
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-## Test Metadata
-
-Each test in the catalog includes comprehensive metadata:
-
-- **Unique ID**: Globally unique identifier for the test
-- **Control ID**: Framework-specific control identifier (e.g., CISC-ND-000620, PCI-DSS-8.3.6)
-- **NIST Controls**: Mapped NIST SP 800-53 controls (e.g., AU-9a, IA-5(1)(c))
-- **CCI**: Control Correlation Identifier for cross-framework mapping
-- **Finding/Rule IDs**: Official framework identifiers for audit compliance
-- **Severity**: high, medium, low (or CAT I, CAT II, CAT III for STIG)
-- **Description**: Human-readable test purpose
-- **Tags**: Searchable keywords (encryption, ssh, logging, etc.)
-- **Dependencies**: Required Python packages
-- **Data Path**: JSONPath to relevant configuration section
-- **Input Schema**: Expected data structure
-- **Runtime**: Estimated execution time (fast, medium, slow)
-
-**NIST Mappings**: All tests map to NIST SP 800-53 Rev 5 controls. See [NIST Mappings Documentation](docs/NIST-MAPPINGS.md) for complete mappings and [Quick Reference](docs/NIST-QUICK-REFERENCE.md) for quick lookup tables.
-
-## Compliance Test Examples
-
-### STIG Example: SSH Version 2 with FIPS Encryption
-
-**STIG ID**: CISC-ND-001210  
-**Severity**: CAT I (High)  
-**Validates**: SSH server uses version 2 with FIPS-approved encryption algorithms
-
-```bash
-TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/sample-cat8000v.yaml" \
-  pytest stig/nso/cisco-ios-xe/router/nso-CISC-ND-001210.py -v
-```
-
-**Check**: 
-- SSH encryption: aes256-ctr, aes192-ctr, aes128-ctr
-- SSH MAC: hmac-sha2-256, hmac-sha2-512
-
-### PCI-DSS Example: Account Lockout Duration
-
-**PCI-DSS Requirement**: 8.3.6  
-**Severity**: High  
-**Validates**: Account lockout for at least 30 minutes after failed authentication
-
-```bash
-TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/sample_cat8000v_native.json" \
-  pytest pci-dss/native/cisco-ios-xe-router/native_pci_8_3_6_account_lockout.py -v
-```
-
-**Check**: Login block-for configured with lockout duration >= 1800 seconds
-
-### CSfC Example: Enclave Gateway Firewall
-
-**Control ID**: CSfC-EG-FW-001  
-**Validates**: Only authorized gray network IPs and management traffic accepted
-
-```bash
-pytest csfc/eg-fw/test_eg_fw_1.py -v
-```
-
-## Data Formats
-
-### NSO Data Format (YANG-modeled JSON/YAML)
-
-```yaml
-tailf-ned-cisco-ios:hostname: ROUTER-01
-tailf-ned-cisco-ios:service:
-  password-encryption: {}
-tailf-ned-cisco-ios:ip:
-  ssh:
-    server:
-      algorithm:
-        encryption:
-          - aes256-ctr
-          - aes192-ctr
-        mac:
-          - hmac-sha2-256
-```
-
-### Native Data Format (CLI/API JSON)
-
-```json
-{
-  "tailf-ncs:config": {
-    "tailf-ned-cisco-ios:hostname": "ROUTER-01",
-    "tailf-ned-cisco-ios:service": {
-      "password-encryption": {}
-    }
-  }
-}
-```
+---
 
 ## Test Development
 
 ### Creating New Tests
 
-All tests follow a consistent structure:
+All tests follow a consistent structure. See the **[Test Development Guide](docs/TEST_DEVELOPMENT_GUIDE.md)** for complete instructions on:
 
-1. **Header Documentation**: STIG/PCI-DSS requirement details, discussion, check text, fix text
-2. **Test Metadata**: Constants for IDs, severity, platform, extraction method
-3. **Data Loading**: Flexible loader supporting multiple data formats
-4. **Validation Logic**: Framework-specific compliance checks
-5. **Detailed Output**: Pass/fail status with remediation guidance
-
-### Example Test Structure
-
-```python
-"""
-STIG ID: CISC-ND-000620
-Finding ID: V-215687
-Severity: High
-Rule Title: Router must only store cryptographic representations of passwords
-"""
-
-import os
-import json
-import yaml
-import pytest
-
-STIG_ID = "CISC-ND-000620"
-FINDING_ID = "V-215687"
-SEVERITY = "High"
-EXTRACTION_METHOD = "nso"
-
-def load_test_data(file_path):
-    # Load and normalize configuration data
-    pass
-
-def test_password_encryption_enabled():
-    # Validate compliance requirement
-    # Assert with detailed error messages
-    # Print summary results
-    pass
-```
+- Data validation test structure
+- State check test structure
+- PyATS testbed configuration
+- Output formatting for AI agents
+- Catalog registration
 
 ### Test Naming Convention
 
@@ -502,75 +710,11 @@ Tests follow a consistent naming pattern:
 - **STIG Native**: `native-CISC-ND-000620.py`
 - **PCI-DSS NSO**: `nso_pci_8_3_6_account_lockout.py`
 - **PCI-DSS Native**: `native_pci_8_3_6_account_lockout.py`
-- **CSfC**: `test_eg_fw_1.py`
+- **HIPAA NSO**: `nso-HIPAA-PA-004.py`
+- **HIPAA Native**: `native-HIPAA-PA-004.py`
+- **State Checks**: `state_bgp_neighbors.py`, `state_gateway_reachability.py`
 
-## Compliance Reporting
-
-### Test Output Format
-
-Tests provide detailed compliance information:
-
-```
-STIG Compliance Summary:
-STIG ID: CISC-ND-001210
-Finding ID: V-220556
-Severity: High
-Title: Router must use SSH version 2 with FIPS-approved encryption
-
-Device Results:
-ROUTER-01: PASS
-  SSH configured with FIPS-approved algorithms
-  Encryption: aes256-ctr, aes192-ctr, aes128-ctr
-  MAC: hmac-sha2-256
-```
-
-### Failure Reporting
-
-Non-compliant configurations receive detailed remediation guidance:
-
-```
-Device ROUTER-01 is not compliant with STIG CISC-ND-000620:
-  Password encryption is NOT enabled
-
-Required configuration:
-  Router(config)# service password-encryption
-
-Finding: Passwords are stored in clear text and can be easily compromised.
-Risk: Unauthorized access if configuration is exposed.
-```
-
-## Supported Compliance Requirements
-
-### STIG Coverage
-
-**Cisco IOS-XE Routers**: 14 tests covering:
-- Access control and session management
-- Account management and auditing
-- Password and authentication security
-- Remote access security (SSH, HTTPS)
-- Logging and audit requirements
-
-**Cisco ASA Firewalls**: 10 tests covering:
-- Logging and audit configuration
-- Syslog transport and redundancy
-- Email alerting for failures
-- Threat detection (basic and scanning)
-- Application layer inspection
-- Service hardening
-
-### PCI-DSS Coverage
-
-**Network Security Controls**: 6 tests covering:
-- Requirement 2.2.2: Vendor default management
-- Requirement 8.3.6: Account lockout duration
-- Requirement 10.3.4: Audit log timestamps
-
-### CSfC Coverage
-
-**Enclave Gateway Architectures**: 14 tests covering:
-- Firewall security policies
-- Access control enforcement
-- Encrypted tunnel configurations
+---
 
 ## Benefits
 
@@ -578,7 +722,7 @@ Risk: Unauthorized access if configuration is exposed.
 
 - **Automated Compliance Validation**: Run compliance checks without manual configuration review
 - **Consistent Testing**: Same validation logic applied across all devices
-- **Multi-Framework Support**: Single repository for STIG, PCI-DSS, NIST, and other frameworks
+- **Multi-Framework Support**: Single repository for STIG, PCI-DSS, HIPAA, NIST, and other frameworks
 - **Detailed Remediation**: Exact configuration commands provided for non-compliant findings
 - **Historical Tracking**: Track compliance posture over time
 
@@ -586,6 +730,7 @@ Risk: Unauthorized access if configuration is exposed.
 
 - **Pre-Deployment Validation**: Test configurations before deploying to production
 - **Change Impact Analysis**: Validate that changes maintain compliance
+- **Operational State Validation**: Verify runtime behavior with state checks
 - **Documentation**: Built-in documentation of security requirements
 - **Multi-Vendor Support**: Consistent testing across Cisco, Juniper, and other vendors
 
@@ -602,105 +747,27 @@ Risk: Unauthorized access if configuration is exposed.
 - **Flexible Queries**: Filter tests by multiple criteria
 - **Automated Discovery**: Find relevant tests based on device attributes
 - **Self-Service**: Download and execute tests without human intervention
+- **MCP Integration**: Execute via Model Context Protocol for seamless AI integration
 
-## Extending the Repository
-
-### Adding New Frameworks
-
-1. Add framework entry to `compliance_frameworks` in catalog.json
-2. Create directory structure: `framework/extraction_method/vendor-platform-role/`
-3. Develop tests following established patterns
-4. Add test metadata to catalog
-
-### Adding New Platforms
-
-1. Register platform in `platform_registry`
-2. Create test directories under relevant frameworks
-3. Develop platform-specific tests
-4. Update catalog with test entries
-
-### Adding New Tests
-
-1. Identify compliance requirement and framework
-2. Create test file in appropriate directory
-3. Follow naming convention: `{extraction_method}-{control_id}.py`
-4. Include full requirement documentation in test header
-5. Add test entry to catalog.json with complete metadata
-
-## Roadmap
-
-### Planned Enhancements
-
-- **Additional STIG Tests**: Expand coverage for routers, switches, and firewalls
-- **NIST 800-53 Tests**: Implement NIST security control validation
-- **HIPAA Tests**: Healthcare-specific network security tests
-- **Juniper Platform Tests**: Expand multi-vendor support
-- **State Check Tests**: Add pyATS-based operational validation
-- **Traffic Analysis Tests**: Implement Batfish policy validation
-- **API Integration**: REST API for programmatic catalog queries
-- **CI/CD Integration**: GitHub Actions workflows for automated testing
-
-## Test Data Management
-
-The `test-data/` directory contains sample configurations for testing and validation. This directory is excluded from version control via `.gitignore` to prevent accidental exposure of production configurations.
-
-### Directory Structure
-
-```
-test-data/
-├── nso/
-│   ├── cisco-ios-xe-router/
-│   │   └── sample-cat8000v.yaml
-│   └── cisco-asa-firewall/
-│       └── sample-asa.json
-└── native/
-    └── cisco-ios-xe-router/
-        ├── sample_cat8000v_native.json
-        └── sample_cat8000v_cli.txt
-```
-
-## Contributing
-
-When adding new tests:
-
-1. Follow established directory structure and naming conventions
-2. Include complete requirement documentation in test header
-3. Support both JSON and YAML input formats
-4. Provide detailed pass/fail messages with remediation guidance
-5. Add comprehensive metadata to catalog.json
-6. Test against sample configurations before committing
-
-## License
-
-This repository is maintained by Presidio Federal HAI Team for internal compliance validation purposes.
-
-## Documentation
-
-- **[README.md](README.md)**: Repository overview and usage guide (this file)
-- **[Data Models Guide](docs/DATA-MODELS.md)**: Configuration extraction methods and API calls for each platform
-- **[NIST Mappings](docs/NIST-MAPPINGS.md)**: Comprehensive NIST SP 800-53 control mappings with control descriptions
-- **[NIST Quick Reference](docs/NIST-QUICK-REFERENCE.md)**: Quick lookup tables for NIST controls and test files
-- **[NIST Mappings Data](docs/nist-800-53-mappings.json)**: Machine-readable NIST mapping data for AI agent queries
-- **[catalog.json](catalog.json)**: Complete test inventory with metadata
-
-## Maintainer
-
-Presidio Federal HAI Team
-
-## Version
-
-Current Version: 2.0.0  
-Last Updated: 2026-01-30
+---
 
 ## Summary Statistics
 
-- **Total Tests**: 49
-- **Compliance Frameworks**: 6 (STIG, PCI-DSS, CSfC, NIST, HIPAA, Purdue)
+- **Total Tests**: 60+ tests across data validation and state checks
+- **Compliance Frameworks**: 6 (STIG, PCI-DSS, HIPAA, CSfC, NIST, Purdue)
 - **Vendors Supported**: 2 (Cisco, Juniper)
 - **Platforms**: 5 (IOS-XE, ASA, NX-OS, Junos, Multi-vendor)
-- **Extraction Methods**: 3 (NSO, Native, API-specific)
-- **Test Types**: 3 (Data Validation, State Checks, Traffic Tests)
+- **Extraction Methods**: 2 (NSO, Native)
+- **Test Types**: 3 (Data Validation, State Checks, Predictive Validation*)
 - **Active Development**: Ongoing expansion of test coverage
+
+*Coming Soon
+
+---
+
+## License
+
+This repository is maintained by AI Studio for network compliance validation purposes.
 
 ---
 

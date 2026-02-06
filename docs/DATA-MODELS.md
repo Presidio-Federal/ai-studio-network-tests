@@ -1,5 +1,7 @@
 # Data Models and Configuration Extraction Guide
 
+[← Back to Main README](../README.md)
+
 ## Overview
 
 The compliance tests in this repository require structured configuration data in specific formats. This guide explains how to extract configuration data from network devices in the correct format for each extraction method and platform.
