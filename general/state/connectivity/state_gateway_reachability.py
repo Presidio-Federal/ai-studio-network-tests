@@ -17,11 +17,22 @@ def test_default_gateway_reachable(device_params, test_config):
     Learns the default route (0.0.0.0/0) from the routing table and pings the next-hop.
     """
     # Build PyATS testbed
+    # Map device_type to PyATS OS
+    os_map = {
+        "cisco_xe": "iosxe",
+        "cisco_ios": "ios",
+        "cisco_nxos": "nxos",
+        "cisco_iosxr": "iosxr",
+        "juniper_junos": "junos",
+        "arista_eos": "eos"
+    }
+    device_os = os_map.get(device_params["device_type"], device_params["device_type"])
+    
     testbed_dict = {
         "devices": {
             device_params["device_name"]: {
-                "type": device_params["device_type"],
-                "os": device_params["device_type"].replace("cisco_", ""),
+                "type": "router",
+                "os": device_os,
                 "connections": {
                     "cli": {
                         "protocol": "ssh",
@@ -140,11 +151,22 @@ def test_learned_neighbors_reachable(device_params, test_config):
     Learns neighbors and tests reachability to each.
     """
     # Build PyATS testbed
+    # Map device_type to PyATS OS
+    os_map = {
+        "cisco_xe": "iosxe",
+        "cisco_ios": "ios",
+        "cisco_nxos": "nxos",
+        "cisco_iosxr": "iosxr",
+        "juniper_junos": "junos",
+        "arista_eos": "eos"
+    }
+    device_os = os_map.get(device_params["device_type"], device_params["device_type"])
+    
     testbed_dict = {
         "devices": {
             device_params["device_name"]: {
-                "type": device_params["device_type"],
-                "os": device_params["device_type"].replace("cisco_", ""),
+                "type": "router",
+                "os": device_os,
                 "connections": {
                     "cli": {
                         "protocol": "ssh",

@@ -16,12 +16,23 @@ def test_logging_destinations_reachable(device_params, test_config):
     
     Learns logging configuration and tests reachability to syslog servers.
     """
+    # Map device_type to PyATS OS
+    os_map = {
+        "cisco_xe": "iosxe",
+        "cisco_ios": "ios",
+        "cisco_nxos": "nxos",
+        "cisco_iosxr": "iosxr",
+        "juniper_junos": "junos",
+        "arista_eos": "eos"
+    }
+    device_os = os_map.get(device_params["device_type"], device_params["device_type"])
+    
     # Build PyATS testbed
     testbed_dict = {
         "devices": {
             device_params["device_name"]: {
-                "type": device_params["device_type"],
-                "os": device_params["device_type"].replace("cisco_", ""),
+                "type": "router",
+                "os": device_os,
                 "connections": {
                     "cli": {
                         "protocol": "ssh",
@@ -128,12 +139,23 @@ def test_logging_enabled(device_params, test_config):
     
     Checks that logging is configured and active.
     """
+    # Map device_type to PyATS OS
+    os_map = {
+        "cisco_xe": "iosxe",
+        "cisco_ios": "ios",
+        "cisco_nxos": "nxos",
+        "cisco_iosxr": "iosxr",
+        "juniper_junos": "junos",
+        "arista_eos": "eos"
+    }
+    device_os = os_map.get(device_params["device_type"], device_params["device_type"])
+    
     # Build PyATS testbed
     testbed_dict = {
         "devices": {
             device_params["device_name"]: {
-                "type": device_params["device_type"],
-                "os": device_params["device_type"].replace("cisco_", ""),
+                "type": "router",
+                "os": device_os,
                 "connections": {
                     "cli": {
                         "protocol": "ssh",
