@@ -2842,14 +2842,14 @@
                   }
                 },
                 {
-                  "id": "general-state-services-dhcp-pool-001",
-                  "name": "state_dhcp_pool_configured.py",
+                  "id": "general-state-services-dhcp-server-validation-001",
+                  "name": "state_dhcp_server_validation.py",
                   "category": "services",
-                  "description": "[DHCP SERVER] Validates DHCP pool configuration including network definitions, default routers, DNS servers, and domain names. Ensures pools are properly configured for client operation.",
+                  "description": "Comprehensive DHCP server validation. Runs all server checks: pool configuration, active bindings, server statistics, and pool utilization. Use this for devices acting as DHCP servers.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-001",
+                  "control_id": "BASELINE-SERVICES-DHCP-SERVER",
                   "severity": "high",
                   "tags": [
                     "dhcp",
@@ -2857,9 +2857,9 @@
                     "services",
                     "state",
                     "pyats",
-                    "configuration"
+                    "comprehensive"
                   ],
-                  "estimated_runtime": "fast",
+                  "estimated_runtime": "medium",
                   "dependencies": [
                     "pyats",
                     "genie",
@@ -2880,27 +2880,33 @@
                     "optional": [
                       "test_config.min_pools",
                       "test_config.require_dns",
-                      "test_config.require_gateway"
+                      "test_config.require_gateway",
+                      "test_config.min_bindings",
+                      "test_config.check_duplicates",
+                      "test_config.max_decline_rate_percent",
+                      "test_config.max_nak_rate_percent",
+                      "test_config.critical_threshold_percent",
+                      "test_config.warning_threshold_percent"
                     ]
                   }
                 },
                 {
-                  "id": "general-state-services-dhcp-bindings-001",
-                  "name": "state_dhcp_bindings_active.py",
-                  "category": "services",
-                  "description": "[DHCP SERVER] Verifies DHCP server has active client bindings. Checks for proper lease assignments, detects duplicate IPs, and warns about expiring leases.",
+                  "id": "general-state-configuration-dhcp-client-validation-001",
+                  "name": "state_dhcp_client_validation.py",
+                  "category": "configuration",
+                  "description": "Comprehensive DHCP client validation. Runs all client checks: IP assignment verification and lease health monitoring. Use this for devices obtaining IP via DHCP.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-002",
-                  "severity": "medium",
+                  "control_id": "BASELINE-CONFIG-DHCP-CLIENT",
+                  "severity": "high",
                   "tags": [
                     "dhcp",
-                    "dhcp-server",
-                    "services",
+                    "dhcp-client",
+                    "configuration",
                     "state",
                     "pyats",
-                    "bindings"
+                    "comprehensive"
                   ],
                   "estimated_runtime": "fast",
                   "dependencies": [
@@ -2921,22 +2927,24 @@
                       "device_params"
                     ],
                     "optional": [
-                      "test_config.min_bindings",
-                      "test_config.check_duplicates",
-                      "test_config.warn_expiring_soon",
-                      "test_config.expiring_threshold_hours"
+                      "test_config.interface",
+                      "test_config.expected_subnet",
+                      "test_config.require_dns",
+                      "test_config.require_gateway",
+                      "test_config.warn_expiring_hours",
+                      "test_config.fail_on_expiring"
                     ]
                   }
                 },
                 {
-                  "id": "general-state-services-dhcp-relay-001",
-                  "name": "state_dhcp_relay_configured.py",
+                  "id": "general-state-services-dhcp-relay-validation-001",
+                  "name": "state_dhcp_relay_validation.py",
                   "category": "services",
-                  "description": "[DHCP RELAY] Validates DHCP relay (ip helper-address) configuration on interfaces. Ensures proper DHCP forwarding to servers in multi-VLAN environments.",
+                  "description": "DHCP relay validation. Checks ip helper-address configuration on interfaces for multi-VLAN DHCP forwarding. Use this for devices forwarding DHCP requests to remote servers.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-RELAY-001",
+                  "control_id": "BASELINE-SERVICES-DHCP-RELAY",
                   "severity": "medium",
                   "tags": [
                     "dhcp",
@@ -2944,7 +2952,6 @@
                     "services",
                     "state",
                     "pyats",
-                    "relay",
                     "helper-address"
                   ],
                   "estimated_runtime": "fast",
@@ -2970,229 +2977,6 @@
                       "test_config.expected_helper_ips",
                       "test_config.require_redundant_helpers",
                       "test_config.min_helpers_per_interface"
-                    ]
-                  }
-                },
-                {
-                  "id": "general-state-services-dhcp-statistics-001",
-                  "name": "state_dhcp_server_statistics.py",
-                  "category": "services",
-                  "description": "[DHCP SERVER] Analyzes DHCP server statistics to detect operational issues. Monitors message counts, decline rates, NAK rates, and server responsiveness.",
-                  "test_type": "state_checks",
-                  "framework": "general",
-                  "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-003",
-                  "severity": "low",
-                  "tags": [
-                    "dhcp",
-                    "dhcp-server",
-                    "services",
-                    "state",
-                    "pyats",
-                    "statistics",
-                    "monitoring"
-                  ],
-                  "estimated_runtime": "fast",
-                  "dependencies": [
-                    "pyats",
-                    "genie",
-                    "pytest"
-                  ],
-                  "requires_state_data": true,
-                  "requires_traffic_data": false,
-                  "requires_device_access": true,
-                  "supported_platforms": [
-                    "iosxe",
-                    "ios",
-                    "nxos"
-                  ],
-                  "test_parameters": {
-                    "required": [
-                      "device_params"
-                    ],
-                    "optional": [
-                      "test_config.max_decline_rate_percent",
-                      "test_config.max_nak_rate_percent",
-                      "test_config.require_activity",
-                      "test_config.min_discovers"
-                    ]
-                  }
-                },
-                {
-                  "id": "general-state-services-dhcp-utilization-001",
-                  "name": "state_dhcp_pool_utilization.py",
-                  "category": "services",
-                  "description": "[DHCP SERVER] Monitors DHCP pool utilization to detect capacity issues. Checks for pool exhaustion risk and ensures adequate free addresses remain.",
-                  "test_type": "state_checks",
-                  "framework": "general",
-                  "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-004",
-                  "severity": "medium",
-                  "tags": [
-                    "dhcp",
-                    "dhcp-server",
-                    "services",
-                    "state",
-                    "pyats",
-                    "capacity",
-                    "utilization"
-                  ],
-                  "estimated_runtime": "fast",
-                  "dependencies": [
-                    "pyats",
-                    "genie",
-                    "pytest"
-                  ],
-                  "requires_state_data": true,
-                  "requires_traffic_data": false,
-                  "requires_device_access": true,
-                  "supported_platforms": [
-                    "iosxe",
-                    "ios",
-                    "nxos"
-                  ],
-                  "test_parameters": {
-                    "required": [
-                      "device_params"
-                    ],
-                    "optional": [
-                      "test_config.critical_threshold_percent",
-                      "test_config.warning_threshold_percent",
-                      "test_config.min_free_addresses",
-                      "test_config.fail_on_warning"
-                    ]
-                  }
-                },
-                {
-                  "id": "general-compliance-security-dhcp-snooping-001",
-                  "name": "compliance_dhcp_snooping.py",
-                  "category": "security",
-                  "description": "[DHCP SECURITY] Validates DHCP snooping security features are properly configured. Checks global enablement, VLAN configuration, trusted ports, and binding database.",
-                  "test_type": "compliance",
-                  "framework": "general",
-                  "platform": "multi-vendor",
-                  "control_id": "BASELINE-SECURITY-DHCP-001",
-                  "severity": "high",
-                  "tags": [
-                    "dhcp",
-                    "dhcp-security",
-                    "security",
-                    "compliance",
-                    "pyats",
-                    "snooping",
-                    "protection"
-                  ],
-                  "estimated_runtime": "fast",
-                  "dependencies": [
-                    "pyats",
-                    "genie",
-                    "pytest"
-                  ],
-                  "requires_state_data": true,
-                  "requires_traffic_data": false,
-                  "requires_device_access": true,
-                  "supported_platforms": [
-                    "iosxe",
-                    "ios",
-                    "nxos"
-                  ],
-                  "test_parameters": {
-                    "required": [
-                      "device_params"
-                    ],
-                    "optional": [
-                      "test_config.require_snooping",
-                      "test_config.required_vlans",
-                      "test_config.require_trusted_ports",
-                      "test_config.require_rate_limit",
-                      "test_config.min_trusted_ports"
-                    ]
-                  }
-                },
-                {
-                  "id": "general-state-configuration-dhcp-client-assigned-001",
-                  "name": "state_dhcp_client_assigned.py",
-                  "category": "configuration",
-                  "description": "[DHCP CLIENT] Validates that an interface has successfully obtained an IP address via DHCP. Checks IP assignment, DNS servers, default gateway, and lease information.",
-                  "test_type": "state_checks",
-                  "framework": "general",
-                  "platform": "multi-vendor",
-                  "control_id": "BASELINE-CONFIG-DHCP-CLIENT-001",
-                  "severity": "high",
-                  "tags": [
-                    "dhcp",
-                    "dhcp-client",
-                    "configuration",
-                    "state",
-                    "pyats",
-                    "ip-assignment"
-                  ],
-                  "estimated_runtime": "fast",
-                  "dependencies": [
-                    "pyats",
-                    "genie",
-                    "pytest"
-                  ],
-                  "requires_state_data": true,
-                  "requires_traffic_data": false,
-                  "requires_device_access": true,
-                  "supported_platforms": [
-                    "iosxe",
-                    "ios",
-                    "nxos"
-                  ],
-                  "test_parameters": {
-                    "required": [
-                      "device_params",
-                      "test_config.interface"
-                    ],
-                    "optional": [
-                      "test_config.expected_subnet",
-                      "test_config.require_dns",
-                      "test_config.require_gateway"
-                    ]
-                  }
-                },
-                {
-                  "id": "general-state-configuration-dhcp-client-lease-001",
-                  "name": "state_dhcp_client_lease_health.py",
-                  "category": "configuration",
-                  "description": "[DHCP CLIENT] Validates DHCP client leases are healthy and not expired. Checks all DHCP-enabled interfaces for valid leases and warns about expiring leases.",
-                  "test_type": "state_checks",
-                  "framework": "general",
-                  "platform": "multi-vendor",
-                  "control_id": "BASELINE-CONFIG-DHCP-CLIENT-002",
-                  "severity": "medium",
-                  "tags": [
-                    "dhcp",
-                    "dhcp-client",
-                    "configuration",
-                    "state",
-                    "pyats",
-                    "lease-health"
-                  ],
-                  "estimated_runtime": "fast",
-                  "dependencies": [
-                    "pyats",
-                    "genie",
-                    "pytest"
-                  ],
-                  "requires_state_data": true,
-                  "requires_traffic_data": false,
-                  "requires_device_access": true,
-                  "supported_platforms": [
-                    "iosxe",
-                    "ios",
-                    "nxos"
-                  ],
-                  "test_parameters": {
-                    "required": [
-                      "device_params"
-                    ],
-                    "optional": [
-                      "test_config.interface",
-                      "test_config.warn_expiring_hours",
-                      "test_config.fail_on_expiring"
                     ]
                   }
                 }
