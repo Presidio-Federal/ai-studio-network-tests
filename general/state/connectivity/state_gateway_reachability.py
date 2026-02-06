@@ -97,6 +97,10 @@ def test_default_gateway_reachable(device_params, test_config):
             "Device may not have a default route configured."
         )
         
+        print(f"\n✓ Found {len(default_gateways)} default gateway(s):")
+        for gw in default_gateways:
+            print(f"  - {gw['next_hop']} (VRF: {gw['vrf']}, Interface: {gw['interface']})")
+        
         # Test reachability for each gateway
         failed_gateways = []
         
@@ -113,6 +117,7 @@ def test_default_gateway_reachable(device_params, test_config):
             
             if success_match:
                 success_rate = int(success_match.group(1))
+                print(f"  ✓ {next_hop}: {success_rate}% reachable")
                 if success_rate < 100:
                     failed_gateways.append({
                         "gateway": next_hop,
@@ -122,6 +127,7 @@ def test_default_gateway_reachable(device_params, test_config):
                     })
             else:
                 # Could not parse - assume failure
+                print(f"  ✗ {next_hop}: Could not parse ping output")
                 failed_gateways.append({
                     "gateway": next_hop,
                     "vrf": gateway["vrf"],
@@ -139,6 +145,8 @@ def test_default_gateway_reachable(device_params, test_config):
                 for gw in failed_gateways
             ])
         )
+        
+        print(f"\n✓ All {len(default_gateways)} gateway(s) are reachable")
         
     finally:
         device.disconnect()
