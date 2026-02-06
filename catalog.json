@@ -2845,14 +2845,15 @@
                   "id": "general-state-services-dhcp-pool-001",
                   "name": "state_dhcp_pool_configured.py",
                   "category": "services",
-                  "description": "Validates DHCP pool configuration including network definitions, default routers, DNS servers, and domain names. Ensures pools are properly configured for client operation.",
+                  "description": "[DHCP SERVER] Validates DHCP pool configuration including network definitions, default routers, DNS servers, and domain names. Ensures pools are properly configured for client operation.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-001",
+                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-001",
                   "severity": "high",
                   "tags": [
                     "dhcp",
+                    "dhcp-server",
                     "services",
                     "state",
                     "pyats",
@@ -2887,14 +2888,15 @@
                   "id": "general-state-services-dhcp-bindings-001",
                   "name": "state_dhcp_bindings_active.py",
                   "category": "services",
-                  "description": "Verifies DHCP server has active client bindings. Checks for proper lease assignments, detects duplicate IPs, and warns about expiring leases.",
+                  "description": "[DHCP SERVER] Verifies DHCP server has active client bindings. Checks for proper lease assignments, detects duplicate IPs, and warns about expiring leases.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-002",
+                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-002",
                   "severity": "medium",
                   "tags": [
                     "dhcp",
+                    "dhcp-server",
                     "services",
                     "state",
                     "pyats",
@@ -2930,14 +2932,15 @@
                   "id": "general-state-services-dhcp-relay-001",
                   "name": "state_dhcp_relay_configured.py",
                   "category": "services",
-                  "description": "Validates DHCP relay (ip helper-address) configuration on interfaces. Ensures proper DHCP forwarding to servers in multi-VLAN environments.",
+                  "description": "[DHCP RELAY] Validates DHCP relay (ip helper-address) configuration on interfaces. Ensures proper DHCP forwarding to servers in multi-VLAN environments.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-003",
+                  "control_id": "BASELINE-SERVICES-DHCP-RELAY-001",
                   "severity": "medium",
                   "tags": [
                     "dhcp",
+                    "dhcp-relay",
                     "services",
                     "state",
                     "pyats",
@@ -2974,14 +2977,15 @@
                   "id": "general-state-services-dhcp-statistics-001",
                   "name": "state_dhcp_server_statistics.py",
                   "category": "services",
-                  "description": "Analyzes DHCP server statistics to detect operational issues. Monitors message counts, decline rates, NAK rates, and server responsiveness.",
+                  "description": "[DHCP SERVER] Analyzes DHCP server statistics to detect operational issues. Monitors message counts, decline rates, NAK rates, and server responsiveness.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-004",
+                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-003",
                   "severity": "low",
                   "tags": [
                     "dhcp",
+                    "dhcp-server",
                     "services",
                     "state",
                     "pyats",
@@ -3018,14 +3022,15 @@
                   "id": "general-state-services-dhcp-utilization-001",
                   "name": "state_dhcp_pool_utilization.py",
                   "category": "services",
-                  "description": "Monitors DHCP pool utilization to detect capacity issues. Checks for pool exhaustion risk and ensures adequate free addresses remain.",
+                  "description": "[DHCP SERVER] Monitors DHCP pool utilization to detect capacity issues. Checks for pool exhaustion risk and ensures adequate free addresses remain.",
                   "test_type": "state_checks",
                   "framework": "general",
                   "platform": "multi-vendor",
-                  "control_id": "BASELINE-SERVICES-DHCP-005",
+                  "control_id": "BASELINE-SERVICES-DHCP-SERVER-004",
                   "severity": "medium",
                   "tags": [
                     "dhcp",
+                    "dhcp-server",
                     "services",
                     "state",
                     "pyats",
@@ -3062,7 +3067,7 @@
                   "id": "general-compliance-security-dhcp-snooping-001",
                   "name": "compliance_dhcp_snooping.py",
                   "category": "security",
-                  "description": "Validates DHCP snooping security features are properly configured. Checks global enablement, VLAN configuration, trusted ports, and binding database.",
+                  "description": "[DHCP SECURITY] Validates DHCP snooping security features are properly configured. Checks global enablement, VLAN configuration, trusted ports, and binding database.",
                   "test_type": "compliance",
                   "framework": "general",
                   "platform": "multi-vendor",
@@ -3070,6 +3075,7 @@
                   "severity": "high",
                   "tags": [
                     "dhcp",
+                    "dhcp-security",
                     "security",
                     "compliance",
                     "pyats",
@@ -3100,6 +3106,93 @@
                       "test_config.require_trusted_ports",
                       "test_config.require_rate_limit",
                       "test_config.min_trusted_ports"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-configuration-dhcp-client-assigned-001",
+                  "name": "state_dhcp_client_assigned.py",
+                  "category": "configuration",
+                  "description": "[DHCP CLIENT] Validates that an interface has successfully obtained an IP address via DHCP. Checks IP assignment, DNS servers, default gateway, and lease information.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-CONFIG-DHCP-CLIENT-001",
+                  "severity": "high",
+                  "tags": [
+                    "dhcp",
+                    "dhcp-client",
+                    "configuration",
+                    "state",
+                    "pyats",
+                    "ip-assignment"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params",
+                      "test_config.interface"
+                    ],
+                    "optional": [
+                      "test_config.expected_subnet",
+                      "test_config.require_dns",
+                      "test_config.require_gateway"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-configuration-dhcp-client-lease-001",
+                  "name": "state_dhcp_client_lease_health.py",
+                  "category": "configuration",
+                  "description": "[DHCP CLIENT] Validates DHCP client leases are healthy and not expired. Checks all DHCP-enabled interfaces for valid leases and warns about expiring leases.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-CONFIG-DHCP-CLIENT-002",
+                  "severity": "medium",
+                  "tags": [
+                    "dhcp",
+                    "dhcp-client",
+                    "configuration",
+                    "state",
+                    "pyats",
+                    "lease-health"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.interface",
+                      "test_config.warn_expiring_hours",
+                      "test_config.fail_on_expiring"
                     ]
                   }
                 }
