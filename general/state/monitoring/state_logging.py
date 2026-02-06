@@ -27,6 +27,11 @@ def test_logging_destinations_reachable(device_params, test_config):
                         "protocol": "ssh",
                         "ip": device_params["host"],
                         "port": device_params["port"],
+                        "arguments": {
+                            "learn_hostname": True,
+                            "init_exec_commands": [],
+                            "init_config_commands": []
+                        }
                     }
                 },
                 "credentials": {
@@ -134,6 +139,11 @@ def test_logging_enabled(device_params, test_config):
                         "protocol": "ssh",
                         "ip": device_params["host"],
                         "port": device_params["port"],
+                        "arguments": {
+                            "learn_hostname": True,
+                            "init_exec_commands": [],
+                            "init_config_commands": []
+                        }
                     }
                 },
                 "credentials": {
