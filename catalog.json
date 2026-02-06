@@ -2759,10 +2759,98 @@
                       "test_config.timeout"
                     ]
                   }
+                },
+                {
+                  "id": "general-state-connectivity-gateway-001",
+                  "name": "state_gateway_reachability.py",
+                  "category": "connectivity",
+                  "description": "Automatically learns default gateway from routing table and verifies reachability via ping. No configuration required.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-CONNECTIVITY-GATEWAY-001",
+                  "severity": "high",
+                  "tags": [
+                    "gateway",
+                    "connectivity",
+                    "state",
+                    "pyats",
+                    "learned",
+                    "multi-vendor"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "nxos",
+                    "junos",
+                    "iosxr"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": []
+                  }
                 }
               ]
             },
-            "traffic_tests": {
+            "monitoring": {
+              "description": "Monitoring and management service validation",
+              "framework": "pyats",
+              "path": "general/state/monitoring",
+              "tests": [
+                {
+                  "id": "general-state-monitoring-logging-001",
+                  "name": "state_logging.py",
+                  "category": "monitoring",
+                  "description": "Automatically learns configured logging destinations (syslog servers) and verifies they are reachable. Tests both logging enablement and server connectivity.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-MONITORING-LOGGING-001",
+                  "severity": "medium",
+                  "tags": [
+                    "logging",
+                    "syslog",
+                    "monitoring",
+                    "state",
+                    "pyats",
+                    "learned",
+                    "multi-vendor"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "nxos",
+                    "junos",
+                    "iosxr"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": []
+                  }
+                }
+              ]
+            },
+            "state_checks": {
               "description": "Generic traffic flow validation",
               "framework": "batfish",
               "path": "general/traffic",
