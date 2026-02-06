@@ -2840,6 +2840,268 @@
                     ],
                     "optional": []
                   }
+                },
+                {
+                  "id": "general-state-services-dhcp-pool-001",
+                  "name": "state_dhcp_pool_configured.py",
+                  "category": "services",
+                  "description": "Validates DHCP pool configuration including network definitions, default routers, DNS servers, and domain names. Ensures pools are properly configured for client operation.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SERVICES-DHCP-001",
+                  "severity": "high",
+                  "tags": [
+                    "dhcp",
+                    "services",
+                    "state",
+                    "pyats",
+                    "configuration"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.min_pools",
+                      "test_config.require_dns",
+                      "test_config.require_gateway"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-services-dhcp-bindings-001",
+                  "name": "state_dhcp_bindings_active.py",
+                  "category": "services",
+                  "description": "Verifies DHCP server has active client bindings. Checks for proper lease assignments, detects duplicate IPs, and warns about expiring leases.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SERVICES-DHCP-002",
+                  "severity": "medium",
+                  "tags": [
+                    "dhcp",
+                    "services",
+                    "state",
+                    "pyats",
+                    "bindings"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.min_bindings",
+                      "test_config.check_duplicates",
+                      "test_config.warn_expiring_soon",
+                      "test_config.expiring_threshold_hours"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-services-dhcp-relay-001",
+                  "name": "state_dhcp_relay_configured.py",
+                  "category": "services",
+                  "description": "Validates DHCP relay (ip helper-address) configuration on interfaces. Ensures proper DHCP forwarding to servers in multi-VLAN environments.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SERVICES-DHCP-003",
+                  "severity": "medium",
+                  "tags": [
+                    "dhcp",
+                    "services",
+                    "state",
+                    "pyats",
+                    "relay",
+                    "helper-address"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.required_interfaces",
+                      "test_config.expected_helper_ips",
+                      "test_config.require_redundant_helpers",
+                      "test_config.min_helpers_per_interface"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-services-dhcp-statistics-001",
+                  "name": "state_dhcp_server_statistics.py",
+                  "category": "services",
+                  "description": "Analyzes DHCP server statistics to detect operational issues. Monitors message counts, decline rates, NAK rates, and server responsiveness.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SERVICES-DHCP-004",
+                  "severity": "low",
+                  "tags": [
+                    "dhcp",
+                    "services",
+                    "state",
+                    "pyats",
+                    "statistics",
+                    "monitoring"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.max_decline_rate_percent",
+                      "test_config.max_nak_rate_percent",
+                      "test_config.require_activity",
+                      "test_config.min_discovers"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-state-services-dhcp-utilization-001",
+                  "name": "state_dhcp_pool_utilization.py",
+                  "category": "services",
+                  "description": "Monitors DHCP pool utilization to detect capacity issues. Checks for pool exhaustion risk and ensures adequate free addresses remain.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SERVICES-DHCP-005",
+                  "severity": "medium",
+                  "tags": [
+                    "dhcp",
+                    "services",
+                    "state",
+                    "pyats",
+                    "capacity",
+                    "utilization"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.critical_threshold_percent",
+                      "test_config.warning_threshold_percent",
+                      "test_config.min_free_addresses",
+                      "test_config.fail_on_warning"
+                    ]
+                  }
+                },
+                {
+                  "id": "general-compliance-security-dhcp-snooping-001",
+                  "name": "compliance_dhcp_snooping.py",
+                  "category": "security",
+                  "description": "Validates DHCP snooping security features are properly configured. Checks global enablement, VLAN configuration, trusted ports, and binding database.",
+                  "test_type": "compliance",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-SECURITY-DHCP-001",
+                  "severity": "high",
+                  "tags": [
+                    "dhcp",
+                    "security",
+                    "compliance",
+                    "pyats",
+                    "snooping",
+                    "protection"
+                  ],
+                  "estimated_runtime": "fast",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "ios",
+                    "nxos"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.require_snooping",
+                      "test_config.required_vlans",
+                      "test_config.require_trusted_ports",
+                      "test_config.require_rate_limit",
+                      "test_config.min_trusted_ports"
+                    ]
+                  }
                 }
               ]
             }
