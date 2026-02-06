@@ -2718,6 +2718,47 @@
                   }
                 },
                 {
+                  "id": "general-state-routing-ospf-001",
+                  "name": "state_ospf_neighbors.py",
+                  "category": "routing",
+                  "description": "Validate OSPF neighbor relationships and operational state. Connects to device, learns OSPF neighbors, and validates they are in FULL state.",
+                  "test_type": "state_checks",
+                  "framework": "general",
+                  "platform": "multi-vendor",
+                  "control_id": "BASELINE-ROUTING-OSPF-001",
+                  "severity": "medium",
+                  "tags": [
+                    "ospf",
+                    "routing",
+                    "state",
+                    "pyats",
+                    "multi-vendor"
+                  ],
+                  "estimated_runtime": "medium",
+                  "dependencies": [
+                    "pyats",
+                    "genie",
+                    "pytest"
+                  ],
+                  "requires_state_data": true,
+                  "requires_traffic_data": false,
+                  "requires_device_access": true,
+                  "supported_platforms": [
+                    "iosxe",
+                    "nxos",
+                    "junos",
+                    "iosxr"
+                  ],
+                  "test_parameters": {
+                    "required": [
+                      "device_params"
+                    ],
+                    "optional": [
+                      "test_config.min_neighbors"
+                    ]
+                  }
+                },
+                {
                   "id": "general-state-connectivity-ping-001",
                   "name": "state_connectivity_ping.py",
                   "category": "connectivity",
