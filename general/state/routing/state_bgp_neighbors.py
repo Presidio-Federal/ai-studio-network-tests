@@ -101,18 +101,11 @@ devices:
                         'expected': 'Established'
                     })
         
-        # Build status table for logging
-        table_data = [
-            [n['vrf'], n['neighbor'], n['state'], n['status']]
-            for n in all_neighbors_status
-        ]
-        
-        logger.info(f"\nBGP Status for {device.name}:")
-        logger.info("\n" + tabulate(
-            table_data,
-            headers=['VRF', 'Neighbor', 'State', 'Status'],
-            tablefmt='grid'
-        ))
+        # Print summary for agent visibility
+        print(f"\n✓ Found {len(all_neighbors_status)} BGP neighbor(s):")
+        for n in all_neighbors_status:
+            status_icon = "✓" if n['status'] == 'PASS' else "✗"
+            print(f"  {status_icon} {n['neighbor']} (VRF: {n['vrf']}): {n['state']}")
         
         # Disconnect
         device.disconnect()
@@ -126,7 +119,7 @@ devices:
             ])
         )
         
-        logger.info(f"✓ All {len(all_neighbors_status)} BGP neighbors are Established")
+        print(f"\n✓ All {len(all_neighbors_status)} BGP neighbor(s) are Established")
         
     finally:
         # Ensure disconnect
@@ -193,11 +186,13 @@ devices:
         
         device.disconnect()
         
+        print(f"\n✓ Found {total_neighbors} BGP neighbor(s) configured")
+        
         assert total_neighbors >= min_neighbors, (
             f"Expected at least {min_neighbors} BGP neighbor(s), found {total_neighbors}"
         )
         
-        logger.info(f"✓ Found {total_neighbors} BGP neighbors (minimum: {min_neighbors})")
+        print(f"✓ Meets minimum requirement of {min_neighbors} neighbor(s)")
         
     finally:
         if device.is_connected():

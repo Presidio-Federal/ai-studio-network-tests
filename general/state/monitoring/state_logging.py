@@ -88,6 +88,10 @@ def test_logging_destinations_reachable(device_params, test_config):
             "Device should have at least one syslog destination."
         )
         
+        print(f"\n✓ Found {len(logging_servers)} logging server(s):")
+        for srv in logging_servers:
+            print(f"  - {srv['server']}:{srv['port']} ({srv['transport']})")
+        
         # Test reachability for each server
         failed_servers = []
         
@@ -104,6 +108,7 @@ def test_logging_destinations_reachable(device_params, test_config):
             
             if success_match:
                 success_rate = int(success_match.group(1))
+                print(f"  ✓ {server_ip}: {success_rate}% reachable")
                 if success_rate < 100:
                     failed_servers.append({
                         "server": server_ip,
@@ -112,6 +117,7 @@ def test_logging_destinations_reachable(device_params, test_config):
                         "success_rate": success_rate
                     })
             else:
+                print(f"  ✗ {server_ip}: Could not parse ping output")
                 failed_servers.append({
                     "server": server_ip,
                     "transport": server["transport"],
@@ -128,6 +134,8 @@ def test_logging_destinations_reachable(device_params, test_config):
                 for srv in failed_servers
             ])
         )
+        
+        print(f"\n✓ All {len(logging_servers)} logging server(s) are reachable")
         
     finally:
         device.disconnect()

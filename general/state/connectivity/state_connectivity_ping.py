@@ -47,14 +47,24 @@ def test_ping_connectivity_100_percent(device_params, test_config):
     # Parse results
     parsed = parse_ping_output(output, device_type)
     
+    # Print results for visibility
+    print(f"\n✓ Ping test to {target_ip}:")
+    print(f"  - Packets: {parsed['received']}/{parsed['transmitted']} received")
+    print(f"  - Success rate: {parsed['success_rate']}%")
+    if parsed.get('avg_rtt'):
+        print(f"  - Average RTT: {parsed['avg_rtt']}ms")
+    
     # Assert 100% success
     assert parsed['success_rate'] == 100.0, (
         f"Expected 100% success rate, got {parsed['success_rate']}% "
         f"({parsed['received']}/{parsed['transmitted']} packets)"
     )
     
+    print(f"\n✓ Connectivity test passed with 100% success rate")
+    
     # Optional: Warn about high latency
     if parsed.get('avg_rtt') and parsed['avg_rtt'] > 100:
+        print(f"⚠ Warning: High latency detected ({parsed['avg_rtt']}ms average RTT)")
         pytest.warnings.warn(
             UserWarning(f"High latency: {parsed['avg_rtt']}ms average RTT")
         )
