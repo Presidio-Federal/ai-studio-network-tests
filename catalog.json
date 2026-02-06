@@ -2799,14 +2799,7 @@
                     ],
                     "optional": []
                   }
-                }
-              ]
-            },
-            "monitoring": {
-              "description": "Monitoring and management service validation",
-              "framework": "pyats",
-              "path": "general/state/monitoring",
-              "tests": [
+                },
                 {
                   "id": "general-state-monitoring-logging-001",
                   "name": "state_logging.py",
@@ -2849,12 +2842,6 @@
                   }
                 }
               ]
-            },
-            "state_checks": {
-              "description": "Generic traffic flow validation",
-              "framework": "batfish",
-              "path": "general/traffic",
-              "tests": []
             }
           }
         }
