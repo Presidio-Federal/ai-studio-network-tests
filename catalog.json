@@ -3,7 +3,7 @@
   "description": "Presidio Federal HAI Network Validation Test Catalog - Multi-Framework, Multi-Vendor Compliance Testing",
   "version": "2.0.0",
   "maintainer": "Presidio Federal HAI Team",
-  "last_updated": "2026-02-03T18:40:00Z",
+  "last_updated": "2026-02-10T00:52:11Z",
   "schema_version": "2.0",
   "metadata": {
     "purpose": "Centralized compliance testing repository for network infrastructure",
@@ -1214,6 +1214,148 @@
                           "description": "Traffic flow and security policy validation",
                           "framework": "batfish",
                           "path": "stig/native/cisco-ios-xe-router/traffic",
+                          "tests": []
+                        }
+                      }
+                    },
+                    "switch": {
+                      "stig_variant": "switch-rtr",
+                      "stig_version": "V3R3",
+                      "full_name": "Cisco IOS XE Switch RTR STIG (Native & State)",
+                      "test_types": {
+                        "data_validation": {
+                          "description": "Configuration validation using pytest against native CLI/API JSON",
+                          "framework": "pytest",
+                          "path": "stig/native/cisco-ios-xe-switch",
+                          "tests": [
+                            {
+                              "id": "stig-native-iosxe-switch-v220998-dv-001",
+                              "name": "native-CISC-RT-000150.py",
+                              "description": "The Cisco switch must be configured to have Gratuitous ARP disabled on all external interfaces to protect against ARP spoofing and DoS attacks.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "switch",
+                              "control_id": "CISC-RT-000150",
+                              "finding_id": "V-220998",
+                              "rule_id": "SV-220998r856403_rule",
+                              "severity": "medium",
+                              "stig_date": "2025-10-01",
+                              "tags": [
+                                "arp",
+                                "gratuitous-arp",
+                                "dos-protection",
+                                "arp-spoofing",
+                                "network-security",
+                                "stig",
+                                "switch",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "Cisco-IOS-XE-native:native.ip",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            },
+                            {
+                              "id": "stig-native-iosxe-switch-v221006-dv-002",
+                              "name": "native-CISC-RT-000230.py",
+                              "description": "The Cisco switch must be configured to disable the auxiliary port unless it is connected to a secured modem providing encryption and authentication to prevent war dialing attacks and unauthorized dial-in access.",
+                              "test_type": "data_validation",
+                              "framework": "STIG",
+                              "extraction_method": "native",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "switch",
+                              "control_id": "CISC-RT-000230",
+                              "finding_id": "V-221006",
+                              "rule_id": "SV-221006r1117237_rule",
+                              "severity": "low",
+                              "stig_date": "2025-10-01",
+                              "tags": [
+                                "auxiliary-port",
+                                "line-security",
+                                "dial-in-access",
+                                "war-dialing",
+                                "attack-surface",
+                                "information-flow-control",
+                                "stig",
+                                "switch",
+                                "native"
+                              ],
+                              "estimated_runtime": "fast",
+                              "input_schema": "schemas/native_cisco_ios_xe.json",
+                              "data_path": "Cisco-IOS-XE-native:native.line.aux",
+                              "dependencies": [
+                                "pytest",
+                                "json",
+                                "yaml"
+                              ],
+                              "requires_state_data": false,
+                              "requires_traffic_data": false
+                            }
+                          ]
+                        },
+                        "state_checks": {
+                          "description": "Operational state validation using pyATS/Genie",
+                          "framework": "pyats",
+                          "path": "stig/state/cisco-ios-xe-switch",
+                          "tests": [
+                            {
+                              "id": "stig-state-iosxe-switch-v220991-sc-001",
+                              "name": "state-CISC-RT-000060.py",
+                              "description": "The Cisco switch must have all inactive interfaces disabled. This test uses pyATS to identify interfaces that are administratively up but operationally down or have minimal traffic, which should be reviewed and shutdown.",
+                              "test_type": "state_check",
+                              "framework": "STIG",
+                              "extraction_method": "state",
+                              "vendor": "cisco",
+                              "platform": "ios-xe",
+                              "device_type": "switch",
+                              "control_id": "CISC-RT-000060",
+                              "finding_id": "V-220991",
+                              "rule_id": "SV-220991r1117237_rule",
+                              "severity": "low",
+                              "stig_date": "2025-10-01",
+                              "tags": [
+                                "interface-security",
+                                "attack-surface",
+                                "least-functionality",
+                                "stig",
+                                "state-check",
+                                "pyats",
+                                "switch",
+                                "inactive-interfaces",
+                                "information-flow-control"
+                              ],
+                              "estimated_runtime": "medium",
+                              "input_schema": null,
+                              "data_path": null,
+                              "dependencies": [
+                                "pyats",
+                                "genie",
+                                "pytest"
+                              ],
+                              "requires_state_data": true,
+                              "requires_traffic_data": false,
+                              "pyats_features": [
+                                "interface",
+                                "counters"
+                              ],
+                              "live_device_required": true
+                            }
+                          ]
+                        },
+                        "traffic_tests": {
+                          "description": "Traffic flow and security policy validation",
+                          "framework": "batfish",
+                          "path": "stig/state/cisco-ios-xe-switch/traffic",
                           "tests": []
                         }
                       }

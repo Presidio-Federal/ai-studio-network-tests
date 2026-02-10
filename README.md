@@ -486,13 +486,15 @@ TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/config.json" \
 
 The STIG test suite validates DoD security requirements for network devices:
 
-#### Cisco IOS-XE (26 tests)
+#### Cisco IOS-XE (29 tests)
 - Session management and access control
 - Account management and auditing  
 - Password and authentication security
 - Remote access security (SSH, HTTPS)
 - Logging and audit requirements
 - Service hardening
+- **State Checks**: Inactive interface validation (pyATS/Genie)
+- **Switch-Specific**: Gratuitous ARP protection (DoS prevention), Auxiliary port security
 
 #### Cisco ASA Firewall (10 tests)
 - Logging and audit configuration
@@ -507,14 +509,27 @@ The STIG test suite validates DoD security requirements for network devices:
 - Session timeout controls
 - Authentication mechanisms
 
-**Current Coverage**: 47 tests across multiple platforms  
+**Current Coverage**: 50 tests across multiple platforms  
 **Severity Levels**: CAT I (High), CAT II (Medium), CAT III (Low)  
 **NIST Mapping**: All tests map to NIST SP 800-53 Rev 5 controls
 
-**Example Test**:
+**Example Tests**:
 ```bash
+# Data validation test (configuration check)
 TEST_INPUT_JSON="test-data/nso/cisco-ios-xe-router/config.yaml" \
   pytest stig/nso/cisco-ios-xe/router/nso-CISC-ND-001210.py -v
+
+# Native switch test (gratuitous ARP check)
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/config.json" \
+  pytest stig/native/cisco-ios-xe-switch/native-CISC-RT-000150.py -v
+
+# Native switch test (auxiliary port security)
+TEST_INPUT_JSON="test-data/native/cisco-ios-xe-router/config.json" \
+  pytest stig/native/cisco-ios-xe-switch/native-CISC-RT-000230.py -v
+
+# State check test (live device operational state)
+pytest stig/state/cisco-ios-xe-switch/state-CISC-RT-000060.py \
+  --testbed=testbed.yaml -v
 ```
 
 ### Purdue Model
